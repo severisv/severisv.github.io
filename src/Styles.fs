@@ -28,7 +28,7 @@ let body =
       Color' black ]
 
 
-let containerWidth = rem 32.0
+let containerWidth = rem 55.0
 
 let container =
     [ Label' "container"
