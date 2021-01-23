@@ -13,61 +13,12 @@ type Model =
     { downloaded: Result<string, string> }
     static member createDefault() = { downloaded = Ok "Ikke noe enda" }
 
-type Msg =
-    | OnDownloadClicked
-    | ResetClicked
-    | OnDownloadedSuccess of string
-    | OnDownloadedFail of exn
-
-
-[<Emit("Math.random()")>]
-let getRandom (): float = jsNative
-
-let downloadAsync path =
-    async {
-        do! Async.Sleep(1000) // emulate work
-
-        let networkEmulated =
-            if (getRandom () * 100.) > 50.
-            then "Yay! Snart!"
-            else raise (System.Exception("Ikke heeelt enda!"))
-
-        return networkEmulated
-    }
 
 
 let init () = Model.createDefault (), Cmd.none
 
 let update message model =
-    match message with
-    | OnDownloadClicked -> model, Cmd.OfAsync.either downloadAsync "/randomData" OnDownloadedSuccess OnDownloadedFail
-    | OnDownloadedSuccess data -> { model with downloaded = Ok data }, Cmd.none
-    | OnDownloadedFail ex ->
-        { model with
-              downloaded = Error ex.Message },
-        Cmd.none
-    | ResetClicked -> Model.createDefault (), Cmd.none
-
-
-
-let io dispatch =
-    [ button [ OnClick(fun _ -> dispatch OnDownloadClicked) ] [
-        str "Prøv lykken"
-      ]
-      button [ OnClick(fun _ -> dispatch ResetClicked) ] [
-          str "Reset"
-      ] ]
-
-let resultView model =
-    match model.downloaded with
-    | Ok r ->
-        h3 [ Style [ CSSProp.Color "blue" ] ] [
-            str r
-        ]
-    | Error er ->
-        h3 [ Style [ CSSProp.Color "red" ] ] [
-            str er
-        ]
+    Model.createDefault (), Cmd.none
 
 
 type SectionAlignment =
