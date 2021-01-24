@@ -47,191 +47,130 @@ let section alignment illustration header content =
          | Right -> [ illustration; margin; content ])
 
 
+
+let divider iconName =
+    div [ css [ MarginTop'(rem 2.0)
+                MarginBottom'(rem 1.0) ] ] [
+        i [ ClassName <| sprintf "fas fa-%s" iconName ] []
+    ]
+
+let p props =
+    p
+        (props
+         @ [ css [ MarginBottom'(rem 0.0)
+                   MarginTop'(rem 0.0)
+                   LineHeight'(rem 1.65) ] ])
+
+let h3 props =
+    h3
+        (props
+         @ [ css [ MarginTop'(rem 0.0)
+                   MarginBottom'(rem 1.0) ] ])
+
 let view (model: Model) dispatch =
 
 
-    let illustration url =
-        img [ Src url
-              css <| [ Width'(pct 100) ] ]
-
     div [ css Styles.body ] [
+        div [ css [ BackgroundColor' Styles.greenLight
+                    TextAlign.Center
+                    LetterSpacing'(Functions.em 0.35)
+                    Styles.fontFancy
+                    MarginBottom' (rem 2.0)
+                     ] ] [
+            h2 [ css [ Color' Styles.green ] ] [
+                str "TONE & SEVERIN"
+            ]
+            div [ ClassName
+                  <| "headerBackground " + fss [ Height'(rem 23.0) ] ] [
+                h1 [ css [ MarginTop'(px 180) ] ] [
+                    str "VI GIFTER OSS!"
+                ]
+                h3 [ css [ MarginTop'(rem 0.0) ] ] [
+                    str "7.AUGUST 2021, FOLKVANG, DRØBAK"
+                ]
+            ]
+        ]
         div [ css Styles.container ] [
-            div [ css [ BackgroundColor' Styles.greenLight; TextAlign.Center; Height' (rem 25.0) ] ] [
-                h2 [ ] [
-                    str "Tone & Severin"
-                ]
-                h1 [] [
-                    str "Vi gifter oss!"  
-                ]
-                h3 [] [
-                    str "07.08.2021"
-                ]
-            ]
-            div [ css [Display.Flex
-                       JustifyContent.Center ] ] [
-               div [css [TextAlign.Right
-                         FlexGrow' (CssFloat 1.0)
-                         MarginRight' (rem 1.0)]] [
-                   h3 [] [
-                       str "24.01.2015"
-                   ]
-                   p [] [
-                       str "Etter å ha unngått hverandre i flere år i Trondhem, møttes Tone & Severin endelig gjennom en av mange felles
+            div [ css [ Display.Flex
+                        JustifyContent.Center ] ] [
+                div [ css [ TextAlign.Justify
+                            FlexGrow'(CssFloat 1.0)
+                            FlexBasis.MinContent
+                            MarginRight'(rem 1.0) ] ] [
+                    p [] [
+                        str "Etter å ha unngått hverandre i flere år i Trondhem, møttes Tone & Severin endelig gjennom en av mange felles
                        venner først etter at begge hadde byttet ut Trøndelag med hovedstaden. 2 år senere flyttet de sammen i sin første leilighet på
-                       Grunerløkka."
-                   ]
-                   p [] [
-                        str "Bare 2 år senere flyttet de 50 meter bort i gaten, og i denne leiligheten forlovet de seg en sen sommer dag i september 2020."
+                       Grunerløkka. Etter 2 år til flyttet de 50 meter lenger bort i gaten, og i denne leiligheten forlovet de seg en tidlig høstdag i 2020."
                     ]
-               ]
-               div [css [TextAlign.Left
-                         FlexGrow' (CssFloat 1.0)
-                         MarginLeft' (rem 1.0)]] [
-                   h3 [] [
-                       str "07.08.2021"
-                   ]
-                   p [] [
-                       str "Vi planlegger gifte seg i den flotte måneden august 2021 - sett at Bent og Erna tillater store feiringer.
-                       Vi gleder oss til den store dagen sammen med venner og familie, og med hverandre."
-                   ]
-                   p [] [
-                       str "Planen for dagen formes, og denne nettsiden vil holde deg oppdatert med alt du trenger å vite."
-                   ]
-               ]
+                ]
+                div [ css [ TextAlign.Justify
+                            FlexGrow'(CssFloat 1.0)
+                            FlexBasis.MinContent
+                            MarginLeft'(rem 1.0) ] ] [
+                    p [] [
+                        str "Vi planlegger å gifte oss i august 2021 - gitt at koronaviruset jekker seg ned litt."
+                    ]
+                    p [] [
+                        str "Planen for dagen formes, og denne nettsiden vil oppdateres med nyttig informasjon."
+                    ]
+                ]
             ]
-            div [css [TextAlign.Center; MaxWidth' (rem 32.0); Margin.Auto]] [
+            div [ css [ TextAlign.Center
+                        MaxWidth'(rem 32.0)
+                        Margin.Auto ] ] [
                 div [] [
-                    div [] [
-                      str "&hearts;"                   
-                    ]
-                    h3 [] [
-                        str "Om bryllupet"
-                    ]
+                    divider "heart"
+                    h3 [] [ str "Bryllupet" ]
                     p [] [
-                        str "Festen avholdes 7.auggust 2021 på Folkvang, Drøbak (Sevs, insert link). Informasjon om seremoni og tider kommer senere."
+                        str "Festen avholdes 7.august 2021 på det tradisjonsrike grendehuset i Frogn, Folkvang."
+                        br []
+                        str "Informasjon om seremoni og tider kommer senere."
                     ]
                 ]
                 div [] [
-                    div [] [
-                       str "&virus;"                   
-                    ]
-                    h3 [] [
-                        str "Om korona"
-                    ]
+                    divider "virus"
+                    h3 [] [ str "Korona" ]
                     p [] [
-                        str "Bryllupet vil dessverre ikke kunne avholdes med korona-restriksjoner som 1-metersreegelen. Vi vil holde dere oppdatert her
-                        ettersom det nærmer seg, men vi håper på at vaksinen både er god og godt distribuert innen august. Pass på å ikke bestill reise eller
-                        overnatting som ikke kan avbestilles, slik situasjonen er nå kan vi ikke si sikkert om bryllupet blir usatt eller ikke."
+                        str
+                            "Det blir ikke mulig å gjennomføre med 1-metersregelen, så hvis den ikke forsvinner må vi skyve på datoen."
+                        str "Vi vil vurdere en eventuell utsettelse i god tid i forveien, så ikke bestill noen reise eller overnatting før vi kan si med sikkerhet
+                        om det lar  seg gjennomføre til planlagt tid.
+                        "
                     ]
                 ]
                 div [] [
-                    div [] [
-                       str "&house;"                   
-                    ]
-                    h3 [] [
-                        str "Om overnatting"
-                    ]
+                    divider "home"
+                    h3 [] [ str "Overnatting" ]
                     p [] [
                         str "Det finnes overnatting både i Oslo og Drøbak - Folkvang er bare en halvtimes kjøretur fra Oslo og ligger fint til
-                        bussforbindelser. Velg det som passer deg best! Hvis interessen for det er stor, vil vi muliigens sitte opp busser fra festen til
+                        bussforbindelser. Velg det som passer deg best! Hvis interessen er stor, kan det hende vi ordner en egen buss fra festen til
                         Oslo sentrum."
                     ]
                 ]
                 div [] [
-                    div [] [
-                       str "&house;"                   
-                    ]
-                    h3 [] [
-                        str "Om overnatting"
-                    ]
+                    divider "envelope"
+                    h3 [] [ str "RVSP" ]
                     p [] [
-                        str "Det finnes overnatting både i Oslo og Drøbak - Folkvang er bare en halvtimes kjøretur fra Oslo og ligger fint til
-                        bussforbindelser. Velg det som passer deg best! Hvis interessen for det er stor, vil vi muliigens sitte opp busser fra festen til
-                        Oslo sentrum."
+                        str
+                            "Det kommer et skjema her på siden hvor man kan svare og fylle inn litt allergier og denslags."
                     ]
                 ]
                 div [] [
-                    div [] [
-                       str "&envelope;"                   
-                    ]
-                    h3 [] [
-                        str "RVSP"
-                    ]
-                    p [] [
-                        str "Kommer senere!"
-                    ]
+                    divider "question"
+                    h3 [] [ str "Spørsmål & Svar" ]
+                    p [] [ str "Kommer senere!" ]
                 ]
                 div [] [
-                    div [] [
-                       str "&qa;"                   
-                    ]
-                    h3 [] [
-                        str "Spørsmål & Svar"
-                    ]
-                    p [] [
-                        str "Kommer senere!"
-                    ]
+                    divider "user-tie"
+                    h3 [] [ str "Viktige personer" ]
+                    p [] [ str "Kommer senere!" ]
                 ]
                 div [] [
-                    div [] [
-                       str "&boss;"                   
-                    ]
-                    h3 [] [
-                        str "Viktige person"
-                    ]
-                    p [] [
-                        str "Kommer senere!"
-                    ]
-                ]
-                div [] [
-                    div [] [
-                       str "&gift;"                   
-                    ]
-                    h3 [] [
-                        str "Ønskeliste"
-                    ]
-                    p [] [
-                        str "Kommer senere!"
-                    ]
+                    divider "gift"
+                    h3 [] [ str "Ønskeliste" ]
+                    p [] [ str "Kommer senere!" ]
                 ]
             ]
-            // old
-
-            h1 [ css
-                 <| Styles.h1
-                    @ [ TextAlign.Center
-                        MarginBottom'(rem 0.50)
-                        MarginTop'(rem 3.0) ] ] [
-                str "Tone & Severin"
-            ]
-            h2 [ css
-                 <| Styles.h2
-                    @ [ TextAlign.Center
-                        MarginBottom'(rem 2.0) ] ] [
-                str "07.08.21"
-            ]
-            section Left (illustration "/assets/wedding.svg") "07.08.21" [ str "Info" ]
-            section
-                Right
-                (illustration "/assets/corona.svg")
-                "Korona"
-                [ str "Korona\n"
-                  br []
-                  p [ css [ MarginTop'(rem 5.0) ] ] [
-                      str " ihi"
-                  ]
-                  str "hola"
-                  p [ css [ TextAlign.Right
-                            TextAlign.Center
-                            TextAlign.End ] ] [
-                      str "Jåv"
-                  ] ]
-            section
-                Left
-                (illustration "/assets/transport.svg")
-                "Transport og overnatting"
-                [ str "Transport og overnatting" ]
-            section Right (illustration "/assets/rsvp.svg") "RSVP" [ str "Svar utbedes innen 1. mai" ]
         ]
     ]
 

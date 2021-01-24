@@ -2,13 +2,13 @@ module App.Styles
 
 open Fss
 
-let fontFancy = FontFamily.Custom "Dancing Script"
-let fontDisplay = FontFamily.Custom "Lora"
-let fontText = FontFamily.Custom "Lora, serif"
+let fontFancy = FontFamily.Custom "Lato"
+let fontDisplay = FontFamily.Custom "Lato"
+let fontText = FontFamily.Custom "Overlock"
 
 
 
-let black = CssColor.Rgb(51, 51, 51)
+let black = CssColor.Rgb(80, 80, 80)
 let grey = CssColor.Hex "#f3f4ef"
 let greenLight = CssColor.Hex "#c1d3c5"
 let green = CssColor.Hex "#a1b59c"
@@ -25,10 +25,12 @@ let h3 = headers @ [ fontDisplay; FontSize'(rem 1.0); MarginBottom' (rem 0.5) ]
 let body =
     [ Label' "body"
       fontText
-      Color' black ]
+      Color' black
+      FontSize' (px 18)
+      PaddingBottom' (rem 2.0)]
 
 
-let containerWidth = rem 55.0
+let containerWidth = rem 48.0
 
 let container =
     [ Label' "container"
