@@ -61,11 +61,10 @@ let p props =
                    MarginTop'(rem 0.0)
                    LineHeight'(rem 1.65) ] ])
 
-let h3 props =
+let h3 (props: CSSProperty list) =
     h3
-        (props
-         @ [ css [ MarginTop'(rem 0.0)
-                   MarginBottom'(rem 1.0) ] ])
+        ([ css <|[ MarginTop'(rem 0.0)
+                   MarginBottom'(rem 1.0) ] @ props])
 
 let view (model: Model) dispatch =
 
@@ -85,28 +84,36 @@ let view (model: Model) dispatch =
                 h1 [ css [ MarginTop'(px 180) ] ] [
                     str "VI GIFTER OSS!"
                 ]
-                h3 [ css [ MarginTop'(rem 0.0) ] ] [
+                h3 [ MarginTop'(rem 0.0) ] [
                     str "7.AUGUST 2021, FOLKVANG, DRØBAK"
                 ]
             ]
         ]
         div [ css Styles.container ] [
-            div [ css [ Display.Flex
+            div [ css [
+                        MediaQuery [Media.MaxWidth <| px 600] [Display.None]
+                        Display.Flex
                         JustifyContent.Center ] ] [
-                div [ css [ TextAlign.Justify
+                div [ css [ TextAlign.Right
                             FlexGrow'(CssFloat 1.0)
-                            FlexBasis.MinContent
+                            FlexBasis' (px 0)
                             MarginRight'(rem 1.0) ] ] [
+                    h3 [] [
+                       str "24.01.2015"
+                    ]
                     p [] [
-                        str "Etter å ha unngått hverandre i flere år i Trondhem, møttes Tone & Severin endelig gjennom en av mange felles
-                       venner først etter at begge hadde byttet ut Trøndelag med hovedstaden. 2 år senere flyttet de sammen i sin første leilighet på
-                       Grunerløkka. Etter 2 år til flyttet de 50 meter lenger bort i gaten, og i denne leiligheten forlovet de seg en tidlig høstdag i 2020."
+                        str "Etter å ha unngått hverandre i flere år i Trondhem, møttes Tone og Severin endelig gjennom en felles
+                       venn etter at begge hadde flyttet til Oslo. 2 år senere flyttet de sammen i sin første leilighet på
+                       Grunerløkka."
                     ]
                 ]
-                div [ css [ TextAlign.Justify
+                div [ css [ TextAlign.Left
                             FlexGrow'(CssFloat 1.0)
-                            FlexBasis.MinContent
+                            FlexBasis' (px 0)
                             MarginLeft'(rem 1.0) ] ] [
+                    h3 [] [
+                       str "07.08.2021"
+                    ]
                     p [] [
                         str "Vi planlegger å gifte oss i august 2021 - gitt at koronaviruset jekker seg ned litt."
                     ]

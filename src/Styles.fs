@@ -27,13 +27,17 @@ let body =
       fontText
       Color' black
       FontSize' (px 18)
-      PaddingBottom' (rem 2.0)]
+      PaddingBottom' (rem 2.0)
+      ]
 
 
-let containerWidth = rem 48.0
+let containerWidth = rem 50.0
 
 let container =
     [ Label' "container"
       Margin.Auto
       MarginTop'(rem 0.0)
-      MaxWidth' containerWidth ]
+      MaxWidth' containerWidth
+      PaddingLeft' (rem 1.0)
+      PaddingRight' (rem 1.0)
+       ]
