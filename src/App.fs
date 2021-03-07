@@ -1,23 +1,92 @@
 module App
 
+open Fable.Import
 open Fss
 open App
 open Fable.Core
 open Elmish
 open Fable.React
 open Fable.React.Props
+open System
 
 let css = fss >> ClassName
 
+type Guest =
+    { Id: Guid
+      Name: string
+      IsAttending: bool option
+      Allergies: string }
+
+
+let newGuest () =
+    { Id = Guid.NewGuid()
+      Name = ""
+      Allergies = ""
+      IsAttending = Option.None }
+
 type Model =
-    { downloaded: Result<string, string> }
-    static member createDefault() = { downloaded = Ok "Ikke noe enda" }
+    { Guests: Guest list
+      IsSending: bool
+      Result: Result<unit, string option> }
+    static member createDefault() =
+        { Result = Error Option.None
+          IsSending = false
+          Guests = [ newGuest () ] }
 
 
+type Msg =
+    | SendClicked
+    | NameChanged of (Guid * string)
+    | AllergiesChanged of (Guid * string)
+    | IsAttendingChanged of (Guid * bool)
+    | AddGuestClicked
+    | SubmitSuccess of string
+    | SubmitFailed of exn
 
 let init () = Model.createDefault (), Cmd.none
 
-let update message model = Model.createDefault (), Cmd.none
+
+
+
+let updateGuest id fn model =
+    { model with
+          Guests =
+              model.Guests
+              |> List.map (function
+                  | g when g.Id = id -> fn g
+                  | g -> g) }
+
+
+let downloadAsync () =
+    async {
+        do! Async.Sleep(2000) // emulate work
+
+        failwithf "Fillern"
+
+
+        return "networkEmulated"
+    }
+
+
+let update message model =
+    match message with
+    | SendClicked ->
+        Browser.Dom.console.log model
+        { model with IsSending = true }, Cmd.OfAsync.either downloadAsync () SubmitSuccess SubmitFailed
+    | NameChanged (id, value) -> updateGuest id (fun guest -> { guest with Name = value }) model, Cmd.none
+    | AllergiesChanged (id, value) -> updateGuest id (fun guest -> { guest with Allergies = value }) model, Cmd.none
+    | IsAttendingChanged (id, value) ->
+        updateGuest id (fun guest -> { guest with IsAttending = Some value }) model, Cmd.none
+    | AddGuestClicked ->
+        { model with
+              Guests = model.Guests @ [ newGuest () ] },
+        Cmd.none
+    | SubmitSuccess _ -> { model with IsSending = false }, Cmd.none
+    | SubmitFailed exn ->
+        { model with
+              IsSending = false
+              Result = Error <| Some exn.Message },
+        Cmd.none
 
 
 type SectionAlignment =
@@ -48,10 +117,13 @@ let section alignment illustration header content =
 
 
 
+let icon iconName =
+    i [ ClassName <| sprintf "fas fa-%s" iconName ] []
+
 let divider iconName =
     div [ css [ MarginTop'(rem 2.0)
                 MarginBottom'(rem 1.0) ] ] [
-        i [ ClassName <| sprintf "fas fa-%s" iconName ] []
+        icon iconName
     ]
 
 let p props =
@@ -63,8 +135,10 @@ let p props =
 
 let h3 (props: CSSProperty list) =
     h3
-        ([ css <|[ MarginTop'(rem 0.0)
-                   MarginBottom'(rem 1.0) ] @ props])
+        ([ css
+           <| [ MarginTop'(rem 0.0)
+                MarginBottom'(rem 1.0) ]
+              @ props ])
 
 let view (model: Model) dispatch =
 
@@ -74,8 +148,7 @@ let view (model: Model) dispatch =
                     TextAlign.Center
                     LetterSpacing'(Functions.em 0.35)
                     Styles.fontFancy
-                    MarginBottom' (rem 2.0)
-                     ] ] [
+                    MarginBottom'(rem 2.0) ] ] [
             h2 [ css [ Color' Styles.green ] ] [
                 str "TONE & SEVERIN"
             ]
@@ -90,17 +163,16 @@ let view (model: Model) dispatch =
             ]
         ]
         div [ css Styles.container ] [
-            div [ css [
-                        MediaQuery [Media.MaxWidth <| px 600] [Display.None]
+            div [ css [ MediaQuery [ Media.MaxWidth <| px 600 ] [
+                            Display.None
+                        ]
                         Display.Flex
                         JustifyContent.Center ] ] [
                 div [ css [ TextAlign.Right
                             FlexGrow'(CssFloat 1.0)
-                            FlexBasis' (px 0)
+                            FlexBasis'(px 0)
                             MarginRight'(rem 1.0) ] ] [
-                    h3 [] [
-                       str "24.01.2015"
-                    ]
+                    h3 [] [ str "24.01.2015" ]
                     p [] [
                         str "Etter å ha unngått hverandre i flere år i Trondhem, møttes Tone og Severin endelig gjennom en felles
                        venn etter at begge hadde flyttet til Oslo. 2 år senere flyttet de sammen i sin første leilighet på
@@ -109,11 +181,9 @@ let view (model: Model) dispatch =
                 ]
                 div [ css [ TextAlign.Left
                             FlexGrow'(CssFloat 1.0)
-                            FlexBasis' (px 0)
+                            FlexBasis'(px 0)
                             MarginLeft'(rem 1.0) ] ] [
-                    h3 [] [
-                       str "07.08.2021"
-                    ]
+                    h3 [] [ str "07.08.2021" ]
                     p [] [
                         str "Vi planlegger å gifte oss i august 2021 - gitt at koronaviruset jekker seg ned litt."
                     ]
@@ -159,8 +229,118 @@ let view (model: Model) dispatch =
                     h3 [] [ str "RVSP" ]
                     p [] [
                         str
-                            "Det kommer et skjema her på siden hvor man kan svare og fylle inn litt allergier og denslags."
+                            "Under kan dere svare på om dere kommer eller ikke - skriv eventuelle allergier eller andre behov som kommentar. Svar utbedes innen 1. juni."
                     ]
+                    br []
+                    br []
+                    (match model.Result with
+                     | Ok () -> str "Takk"
+                     | Error message ->
+                         div
+                             []
+                             ([ div [ css [ Display.Flex
+                                            MarginBottom'(rem 0.5) ] ] [
+                                 label [ (css
+                                              (Styles.label
+                                               @ [ Width'(pct 32)
+                                                   MarginRight'(rem 1.0) ])) ] [
+                                     str "Navn"
+                                 ]
+                                 label [ (css
+                                              (Styles.label
+                                               @ [ Width'(pct 32)
+                                                   MarginRight'(rem 1.0) ])) ] [
+                                     str "Kommentar"
+                                 ]
+                                 label [ (css (Styles.label @ [ Width'(pct 30) ])) ] [
+                                     str "Kommer"
+                                 ]
+                                ] ]
+                              @ (model.Guests
+                                 |> List.map (fun g ->
+                                     div [ css [ Display.Flex
+                                                 AlignItems.Center
+                                                 TextAlign.Left
+                                                 MarginBottom'(rem 0.5) ] ] [
+                                         input [ css
+                                                     (Styles.input
+                                                      @ [ Width'(pct 32)
+                                                          MarginRight'(rem 1.0) ])
+                                                 Props.Type "text"
+                                                 Value g.Name
+                                                 OnChange
+                                                 <| fun e -> dispatch <| NameChanged(g.Id, e.Value) ]
+
+                                         input [ css
+                                                     (Styles.input
+                                                      @ [ Width'(pct 32)
+                                                          MarginRight'(rem 1.0) ])
+                                                 Props.Type "text"
+                                                 Value g.Allergies
+                                                 OnChange
+                                                 <| fun e -> dispatch <| AllergiesChanged(g.Id, e.Value) ]
+                                         div [ css [ Width'(pct 30) ] ] [
+                                             button [ css
+                                                      <| Styles.button
+                                                          Styles.green
+                                                             (if g.IsAttending = Some true then
+                                                                 Styles.Primary
+                                                              else
+                                                                  Styles.Secondary)
+
+                                                      OnClick
+                                                      <| fun e -> dispatch <| IsAttendingChanged(g.Id, true) ] [
+                                                 icon "check"
+                                             ]
+                                             button [ css
+                                                          (Styles.button
+                                                              Styles.pink
+                                                               (if g.IsAttending = Some false then
+                                                                   Styles.Primary
+                                                                else
+                                                                    Styles.Secondary)
+                                                           @ [ MarginLeft'(rem 0.25) ])
+                                                      OnClick
+                                                      <| fun e -> dispatch <| IsAttendingChanged(g.Id, false) ] [
+                                                 icon "times"
+                                             ]
+                                         ]
+                                     ]
+
+
+
+
+
+
+                                     ))
+                                @ [ div [ css [ TextAlign.Left ] ] [
+                                        button [ css Styles.link
+                                                 OnClick <| fun _ -> dispatch AddGuestClicked ] [
+                                            icon "plus"
+                                            str " Legg til gjest"
+                                        ]
+                                    ]
+
+                                    (message
+                                     |> Option.map (fun message ->
+                                         p [] [
+                                             span [ css [ Color' Styles.pinkDark ] ] [
+                                                 str message
+                                             ]
+                                         ])
+                                     |> Option.defaultValue (fragment [] []))
+
+                                    div [ css [ MarginTop'(rem 0.5) ] ] [
+                                        button [ Disabled model.IsSending
+                                                 css
+                                                 <| (Styles.button Styles.blue Styles.Primary)
+                                                    @ [ FontSize'(rem 1.0) ]
+                                                 OnClick <| fun _ -> dispatch SendClicked ] [
+                                            (if model.IsSending then icon "spinner fa-spin" else str "Send")
+                                        ]
+                                    ] ])
+
+                    )
                 ]
                 div [] [
                     divider "question"
@@ -170,8 +350,23 @@ let view (model: Model) dispatch =
                 div [] [
                     divider "user-tie"
                     h3 [] [ str "Viktige personer" ]
-                    p [] [ str "Kommer senere!" ]
+                    p [] [
+                        str "Toastmastere er "
+                        a [ css Styles.link
+                            Href "https://www.facebook.com/torbjornhar"
+                            Target "_blank" ] [
+                            str "Torbjørn"
+                        ]
+                        str " og "
+                        a [ css Styles.link
+                            Href "https://www.facebook.com/herman.l.hauge"
+                            Target "_blank" ] [
+                            str "Herman"
+                        ]
+                        str "."
+                    ]
                 ]
+
                 div [] [
                     divider "gift"
                     h3 [] [ str "Ønskeliste" ]

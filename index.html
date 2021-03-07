@@ -5,34 +5,43 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@1,500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+          crossorigin="anonymous"/>
     <link href="https://fonts.googleapis.com/css2?family=Overlock:wght@400&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="assets/heart-solid.svg" type="image/svg">
 </head>
 
-<body id="elmish-app"></body>
-    <script src="bundle.js?v2"></script>
-    <style>
-        html {
-            background-color: #c1d3c5;
-        }
-        body {
-            background-color: #f3f4ef;
-            margin: 0;
-        }
-        .headerBackground {
-            background-image: linear-gradient(0deg, rgba(193, 211, 197, 0.3), rgba(193, 211, 197, 0.3)), url("assets/header_background.png");
-            background-repeat: no-repeat;
-            background-position-x: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            filter: grayscale(50%);
-            color: white;
-            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
-        }
+<body>
+<div id="elmish-app"></div>
+</body>
+<script src="bundle.js?v2"></script>
+<style>
+    html {
+        background-color: #c1d3c5;
+    }
+    
+    * {
+        box-sizing: border-box;
+    }
 
-    </style>
+    body {
+        background-color: #f3f4ef;
+        margin: 0;
+    }
+
+    .headerBackground {
+        background-image: linear-gradient(0deg, rgba(193, 211, 197, 0.3), rgba(193, 211, 197, 0.3)), url("assets/header_background.png");
+        background-repeat: no-repeat;
+        background-position-x: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        filter: grayscale(50%);
+        color: white;
+        text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+    }
+
+</style>
 </html> 
