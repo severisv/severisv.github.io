@@ -209,7 +209,7 @@ let view (model: Model) dispatch =
                     h3 [] [ str "Korona" ]
                     p [] [
                         str
-                            "Det blir ikke mulig å gjennomføre med 1-metersregelen, så hvis den ikke forsvinner må vi skyve på datoen."
+                            "Det blir ikke mulig å gjennomføre med 1-metersregelen, så hvis den ikke forsvinner må vi skyve på datoen. "
                         str "Vi vil vurdere en eventuell utsettelse i god tid i forveien, så ikke bestill noen reise eller overnatting før vi kan si med sikkerhet
                         om det lar  seg gjennomføre til planlagt tid.
                         "
