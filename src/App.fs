@@ -1,6 +1,7 @@
 module App
 
 open Fable.Import
+open Fable.SimpleHttp
 open Fss
 open App
 open Fable.Core
@@ -8,6 +9,14 @@ open Elmish
 open Fable.React
 open Fable.React.Props
 open System
+open Utils
+
+let YXp6 =
+    [ "QjFYRFE0VTBH"
+      "c2xhY2suY29t"
+      "NjdYYVpEbUYyV0RXcU03ZUpaT2E4U3NH"
+      "aHR0cHM="
+      "VDAyQTU0QTAz" ]
 
 let css = fss >> ClassName
 
@@ -27,10 +36,12 @@ let newGuest () =
 type Model =
     { Guests: Guest list
       IsSending: bool
+      ValidationMessage: string option
       Result: Result<unit, string option> }
     static member createDefault() =
         { Result = Error Option.None
           IsSending = false
+          ValidationMessage = Option.None
           Guests = [ newGuest () ] }
 
 
@@ -57,22 +68,75 @@ let updateGuest id fn model =
                   | g -> g) }
 
 
-let downloadAsync () =
+let url =
+    let YXp6 = YXp6 |> List.map Z2dnZzI
+
+    sprintf
+        "%s://%s.%s/services/%s/%s/%s"
+        YXp6.[3]
+        ("h1337ks".Replace("1337", "oo"))
+        YXp6.[1]
+        YXp6.[4]
+        YXp6.[0]
+        YXp6.[2]
+
+let downloadAsync (guests: Guest list) =
     async {
-        do! Async.Sleep(2000) // emulate work
 
-        failwithf "Fillern"
+        let guests =
+            guests
+            |> List.map (fun g ->
+                sprintf
+                    "{\"title\":\"%s\",\"value\":\"%s - %s\"}"
+                    g.Name
+                    (g.IsAttending
+                     |> Option.map (function
+                         | true -> "Kommer"
+                         | false -> "Kommer ikke")
+                     |> Option.defaultValue "Ikke svart")
+                    g.Allergies)
+            |> String.concat ","
+
+        let requestData =
+            sprintf
+                "{\"channel\":\"#rsvp\",\"username\":\"sot\",\"text\":\"Ny påmelding:\",\"attachments\":[{\"mrkdwn_in\":[\"fields\"],\"fields\":[%s]}]}"
+                guests
 
 
-        return "networkEmulated"
+
+        let! result =
+            Http.request url
+            |> Http.method POST
+            |> Http.content (BodyContent.Text requestData)
+            |> Http.send
+
+
+        if result.statusCode > 299 || result.statusCode < 200
+        then failwith result.responseText
+
+        return result.responseText
     }
 
 
+let validate (model: Model) =
+    model.Guests
+    |> List.map (function
+        | g when g.Name.Length < 2 -> Some "Husk å fylle inn navn på alle gjestene"
+        | g when g.IsAttending.IsNone -> Some "Husk å krysse ja eller nei på alle gjestene"
+        | _ -> Option.None)
+    |> List.choose id
+    |> List.tryHead
+
+
+let isValid = validate >> Option.isNone
+
+
 let update message model =
+    
     match message with
-    | SendClicked ->
-        Browser.Dom.console.log model
-        { model with IsSending = true }, Cmd.OfAsync.either downloadAsync () SubmitSuccess SubmitFailed
+    | SendClicked when isValid model ->
+        { model with IsSending = true; ValidationMessage = Option.None }, Cmd.OfAsync.either downloadAsync model.Guests SubmitSuccess SubmitFailed
+    | SendClicked -> { model with ValidationMessage = validate model }, Cmd.none
     | NameChanged (id, value) -> updateGuest id (fun guest -> { guest with Name = value }) model, Cmd.none
     | AllergiesChanged (id, value) -> updateGuest id (fun guest -> { guest with Allergies = value }) model, Cmd.none
     | IsAttendingChanged (id, value) ->
@@ -81,7 +145,11 @@ let update message model =
         { model with
               Guests = model.Guests @ [ newGuest () ] },
         Cmd.none
-    | SubmitSuccess _ -> { model with IsSending = false }, Cmd.none
+    | SubmitSuccess _ ->
+        { model with
+              IsSending = false
+              Result = Ok() },
+        Cmd.none
     | SubmitFailed exn ->
         { model with
               IsSending = false
@@ -234,7 +302,13 @@ let view (model: Model) dispatch =
                     br []
                     br []
                     (match model.Result with
-                     | Ok () -> str "Takk"
+                     | Ok () ->
+                         fragment [] [
+                             h1 [ css [ Color' Styles.green ] ] [
+                                 str "Takk! 💗"
+                             ]
+                             br []
+                         ]
                      | Error message ->
                          div
                              []
@@ -322,16 +396,33 @@ let view (model: Model) dispatch =
                                     ]
 
                                     (message
-                                     |> Option.map (fun message ->
+                                     |> Option.map (fun _ ->
                                          p [] [
-                                             span [ css [ Color' Styles.pinkDark ] ] [
-                                                 str message
+                                             span [ css [ Color' Styles.pinkDark
+                                                          FontWeight.Bold ] ] [
+                                                 str "Noe gikk galt!"
                                              ]
+                                             p [ css [ Color' Styles.black ] ] [
+                                                 str
+                                                     "Prøv igjen, prøv en annen nettleser eller bare send en god gammeldags melding 🙃"
+                                             ]
+                                             br []
+                                         ])
+                                     |> Option.defaultValue (fragment [] []))
+
+                                    (model.ValidationMessage
+                                     |> Option.map (fun msg ->
+                                             div    [ css [
+                                                          Margin' (rem 1.0)
+                                                          Color' Styles.pinkDark
+                                                          FontWeight.Bold ] ] [
+                                                 str msg
+                                             
                                          ])
                                      |> Option.defaultValue (fragment [] []))
 
                                     div [ css [ MarginTop'(rem 0.5) ] ] [
-                                        button [ Disabled model.IsSending
+                                        button [ Disabled(model.IsSending)
                                                  css
                                                  <| (Styles.button Styles.blue Styles.Primary)
                                                     @ [ FontSize'(rem 1.0) ]
