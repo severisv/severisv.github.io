@@ -24,6 +24,7 @@ type Guest =
     { Id: Guid
       Name: string
       IsAttending: bool option
+      WantsBus: bool
       Allergies: string }
 
 
@@ -31,7 +32,8 @@ let newGuest () =
     { Id = Guid.NewGuid()
       Name = ""
       Allergies = ""
-      IsAttending = Option.None }
+      IsAttending = Option.None
+      WantsBus = false }
 
 type Model =
     { Guests: Guest list
@@ -50,6 +52,7 @@ type Msg =
     | NameChanged of (Guid * string)
     | AllergiesChanged of (Guid * string)
     | IsAttendingChanged of (Guid * bool)
+    | WantBusChanged of Guid
     | AddGuestClicked
     | SubmitSuccess of string
     | SubmitFailed of exn
@@ -71,6 +74,7 @@ let updateGuest id fn model =
 let url =
     let YXp6 = YXp6 |> List.map Z2dnZzI
 
+    
     sprintf
         "%s://%s.%s/services/%s/%s/%s"
         YXp6.[3]
@@ -87,21 +91,21 @@ let downloadAsync (guests: Guest list) =
             guests
             |> List.map (fun g ->
                 sprintf
-                    "{\"title\":\"%s\",\"value\":\"%s - %s\"}"
+                    "{\"title\":\"%s\",\"value\":\"%s - %s        Buss: %s\"}"
                     g.Name
                     (g.IsAttending
                      |> Option.map (function
                          | true -> "Kommer"
                          | false -> "Kommer ikke")
                      |> Option.defaultValue "Ikke svart")
-                    g.Allergies)
+                    g.Allergies
+                    (match g.WantsBus with | true -> "Ja" | false -> "Nei"))
             |> String.concat ","
 
         let requestData =
             sprintf
                 "{\"channel\":\"#rsvp\",\"username\":\"sot\",\"text\":\"Ny påmelding:\",\"attachments\":[{\"mrkdwn_in\":[\"fields\"],\"fields\":[%s]}]}"
                 guests
-
 
 
         let! result =
@@ -132,15 +136,23 @@ let isValid = validate >> Option.isNone
 
 
 let update message model =
-    
+
     match message with
     | SendClicked when isValid model ->
-        { model with IsSending = true; ValidationMessage = Option.None }, Cmd.OfAsync.either downloadAsync model.Guests SubmitSuccess SubmitFailed
-    | SendClicked -> { model with ValidationMessage = validate model }, Cmd.none
+        { model with
+              IsSending = true
+              ValidationMessage = Option.None },
+        Cmd.OfAsync.either downloadAsync model.Guests SubmitSuccess SubmitFailed
+    | SendClicked ->
+        { model with
+              ValidationMessage = validate model },
+        Cmd.none
     | NameChanged (id, value) -> updateGuest id (fun guest -> { guest with Name = value }) model, Cmd.none
     | AllergiesChanged (id, value) -> updateGuest id (fun guest -> { guest with Allergies = value }) model, Cmd.none
     | IsAttendingChanged (id, value) ->
         updateGuest id (fun guest -> { guest with IsAttending = Some value }) model, Cmd.none
+    | WantBusChanged (id) ->
+        updateGuest id (fun guest -> { guest with WantsBus = not guest.WantsBus }) model, Cmd.none    
     | AddGuestClicked ->
         { model with
               Guests = model.Guests @ [ newGuest () ] },
@@ -230,6 +242,31 @@ let view (model: Model) dispatch =
                 ]
             ]
         ]
+        div [ css [ TextAlign.Center
+                    MaxWidth'(rem 32.0)
+                    Margin.Auto ] ] [
+                div [] [
+                    h3 [] [ str "Oppdatering (20. mai)" ]
+                    p [] [
+                        str "Det er noen som begynner å lure på om det blir mulig å holde festen 7. august og hva som er planen."
+                        br []
+                        br []
+                    ]
+                    p [] [
+                        str "Svaret er at det lurer vi også på, men premisset er enkelt; Folkvang har ikke plass til å arrangere for antallet gjester som vi blir med 1 meters avstand. "
+                        str "Vi er derfor avhengige av at det blir lovlig å gjennomføre uten 1 meters avstand i tide. Hvis ikke vil vi skyve på datoen, sannsynligvis til senere i høst."
+                        br []
+                        br []
+                    ]
+                    p [] [
+                        str "Informasjon om hva som skjer vil komme her så fort vi vet, senest i løpet av juni."
+                        br []
+                    ]
+                    divider "heart"
+    
+                ]
+        ]
+        
         div [ css Styles.container ] [
             div [ css [ MediaQuery [ Media.MaxWidth <| px 600 ] [
                             Display.None
@@ -261,7 +298,7 @@ let view (model: Model) dispatch =
                 ]
             ]
             div [ css [ TextAlign.Center
-                        MaxWidth'(rem 32.0)
+                        MaxWidth'(rem 36.0)
                         Margin.Auto ] ] [
                 div [] [
                     divider "heart"
@@ -288,8 +325,8 @@ let view (model: Model) dispatch =
                     h3 [] [ str "Overnatting" ]
                     p [] [
                         str "Det finnes overnatting både i Oslo og Drøbak - Folkvang er bare en halvtimes kjøretur fra Oslo og ligger fint til
-                        bussforbindelser. Velg det som passer deg best! Hvis interessen er stor, kan det hende vi ordner en egen buss fra festen til
-                        Oslo sentrum."
+                        bussforbindelser. Velg det som passer deg best! Det blir også en egen buss fra Folkvang til
+                        Oslo sentrum ved festens slutt, kryss av i RSVP-skjemaet hvis man ønsker det."
                     ]
                 ]
                 div [] [
@@ -316,18 +353,21 @@ let view (model: Model) dispatch =
                                             MarginBottom'(rem 0.5) ] ] [
                                  label [ (css
                                               (Styles.label
-                                               @ [ Width'(pct 32)
+                                               @ [ Width'(pct 27)
                                                    MarginRight'(rem 1.0) ])) ] [
                                      str "Navn"
                                  ]
                                  label [ (css
                                               (Styles.label
-                                               @ [ Width'(pct 32)
+                                               @ [ Width'(pct 27)
                                                    MarginRight'(rem 1.0) ])) ] [
                                      str "Kommentar"
                                  ]
-                                 label [ (css (Styles.label @ [ Width'(pct 30) ])) ] [
+                                 label [ (css (Styles.label @ [ Width'(pct 22) ])) ] [
                                      str "Kommer"
+                                 ]
+                                 label [ (css (Styles.label @ [ Width'(pct 18) ])) ] [
+                                     str "Ønsker buss"
                                  ]
                                 ] ]
                               @ (model.Guests
@@ -338,7 +378,7 @@ let view (model: Model) dispatch =
                                                  MarginBottom'(rem 0.5) ] ] [
                                          input [ css
                                                      (Styles.input
-                                                      @ [ Width'(pct 32)
+                                                      @ [ Width'(pct 27)
                                                           MarginRight'(rem 1.0) ])
                                                  Props.Type "text"
                                                  Value g.Name
@@ -347,13 +387,13 @@ let view (model: Model) dispatch =
 
                                          input [ css
                                                      (Styles.input
-                                                      @ [ Width'(pct 32)
+                                                      @ [ Width'(pct 27)
                                                           MarginRight'(rem 1.0) ])
                                                  Props.Type "text"
                                                  Value g.Allergies
                                                  OnChange
                                                  <| fun e -> dispatch <| AllergiesChanged(g.Id, e.Value) ]
-                                         div [ css [ Width'(pct 30) ] ] [
+                                         div [ css [ Width'(pct 22) ] ] [
                                              button [ css
                                                       <| Styles.button
                                                           Styles.green
@@ -379,6 +419,20 @@ let view (model: Model) dispatch =
                                                  icon "times"
                                              ]
                                          ]
+                                         div [ css [ Width'(pct 18) ] ] [
+                                             button [ css
+                                                      <| Styles.button
+                                                          Styles.blue
+                                                             (if g.WantsBus = true then
+                                                                 Styles.Primary
+                                                              else
+                                                                  Styles.Secondary)
+
+                                                      OnClick
+                                                      <| fun e -> dispatch <| WantBusChanged(g.Id) ] [
+                                                 icon "check"
+                                             ]
+                                                                                    ]
                                      ]
 
 
@@ -412,12 +466,10 @@ let view (model: Model) dispatch =
 
                                     (model.ValidationMessage
                                      |> Option.map (fun msg ->
-                                             div    [ css [
-                                                          Margin' (rem 1.0)
-                                                          Color' Styles.pinkDark
-                                                          FontWeight.Bold ] ] [
-                                                 str msg
-                                             
+                                         div [ css [ Margin'(rem 1.0)
+                                                     Color' Styles.pinkDark
+                                                     FontWeight.Bold ] ] [
+                                             str msg
                                          ])
                                      |> Option.defaultValue (fragment [] []))
 
@@ -434,11 +486,6 @@ let view (model: Model) dispatch =
                     )
                 ]
                 div [] [
-                    divider "question"
-                    h3 [] [ str "Spørsmål & Svar" ]
-                    p [] [ str "Kommer senere!" ]
-                ]
-                div [] [
                     divider "user-tie"
                     h3 [] [ str "Viktige personer" ]
                     p [] [
@@ -448,11 +495,34 @@ let view (model: Model) dispatch =
                             Target "_blank" ] [
                             str "Torbjørn"
                         ]
-                        str " og "
+                        str " (torbjornhar at gmail.com) og "
                         a [ css Styles.link
                             Href "https://www.facebook.com/herman.l.hauge"
                             Target "_blank" ] [
                             str "Herman"
+                        ]
+                        str " (herman.l.hauge at gmail.com)."
+                    ]
+                    br []
+                    br []
+                    p [] [
+                        str "Forlovere er "
+                        a [ css Styles.link
+                            Href "https://www.facebook.com/lydtekniker"
+                            Target "_blank" ] [
+                            str "Hans Arne"
+                        ]
+                        str ", "
+                        a [ css Styles.link
+                            Href "https://www.facebook.com/nicohvi"
+                            Target "_blank" ] [
+                            str "Nicolay"
+                        ]
+                        str " og "
+                        a [ css Styles.link
+                            Href "https://www.facebook.com/karoline.sorbo"
+                            Target "_blank" ] [
+                            str "Karoline"
                         ]
                         str "."
                     ]
@@ -463,6 +533,11 @@ let view (model: Model) dispatch =
                     h3 [] [ str "Ønskeliste" ]
                     p [] [ str "Kommer senere!" ]
                 ]
+//                div [] [
+//                    divider "question"
+//                    h3 [] [ str "Spørsmål & Svar" ]
+//                    p [] [ str "Kommer senere!" ]
+//                ]
             ]
         ]
     ]
