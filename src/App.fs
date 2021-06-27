@@ -238,7 +238,7 @@ let view (model: Model) dispatch =
                     str "VI GIFTER OSS!"
                 ]
                 h3 [ MarginTop'(rem 0.0) ] [
-                    str "7.AUGUST 2021, FOLKVANG, DRØBAK"
+                    str "7.AUGUST 2021"//, FOLKVANG, DRØBAK"
                 ]
             ]
         ]
@@ -246,22 +246,14 @@ let view (model: Model) dispatch =
                     MaxWidth'(rem 32.0)
                     Margin.Auto ] ] [
                 div [] [
-                    h3 [] [ str "Oppdatering (20. mai)" ]
+                    h3 [] [ str "Oppdatering (27. juni)" ]
                     p [] [
-                        str "Det er noen som begynner å lure på om det blir mulig å holde festen 7. august og hva som er planen."
+                        str "Det blir bryllup 7. august! Vi har bestemt oss for å flytte festen fra Folkvang til et sted hvor vi kan gjennomføre med gjeldende bestemmelser.
+                        Detaljene er ikke fullstendig spikret, men vi føles oss trygge på at det blir feiring med mindre det blir gjeninnført strengere restriksjoner enn de som gjelder i dag.
+                        Feiringen vil fremdeles finne sted i Oslo-området - vi kommer med bedre informasjon veldig snart!"
                         br []
                         br []
-                    ]
-                    p [] [
-                        str "Svaret er at det lurer vi også på, men premisset er enkelt; Folkvang har ikke plass til å arrangere for antallet gjester som vi blir med 1 meters avstand. "
-                        str "Vi er derfor avhengige av at det blir lovlig å gjennomføre uten 1 meters avstand i tide. Hvis ikke vil vi skyve på datoen, sannsynligvis til senere i høst."
-                        br []
-                        br []
-                    ]
-                    p [] [
-                        str "Informasjon om hva som skjer vil komme her så fort vi vet, senest i løpet av juni."
-                        br []
-                    ]
+                    ]                   
                     divider "heart"
     
                 ]
@@ -304,9 +296,9 @@ let view (model: Model) dispatch =
                     divider "heart"
                     h3 [] [ str "Bryllupet" ]
                     p [] [
-                        str "Festen avholdes 7.august 2021 på det tradisjonsrike grendehuset i Frogn, Folkvang."
+                        str "Festen avholdes 7.august 2021 i Oslo-området."
                         br []
-                        str "Informasjon om seremoni og tider kommer senere."
+                        str "Informasjon om hvor og når kommer veldig snart."
                     ]
                 ]
                 div [] [
@@ -314,27 +306,25 @@ let view (model: Model) dispatch =
                     h3 [] [ str "Korona" ]
                     p [] [
                         str
-                            "Det blir ikke mulig å gjennomføre med 1-metersregelen, så hvis den ikke forsvinner må vi skyve på datoen. "
-                        str "Vi vil vurdere en eventuell utsettelse i god tid i forveien, så ikke bestill noen reise eller overnatting før vi kan si med sikkerhet
-                        om det lar  seg gjennomføre til planlagt tid.
-                        "
+                            "Vi vil gjennomføre i henhold til gjeldende forskrift. Nøyaktig informasjon om hva det innebærer kommer etter at vi har fått avtalt med arrangøren."                       
+                        
                     ]
                 ]
-                div [] [
-                    divider "home"
-                    h3 [] [ str "Overnatting" ]
-                    p [] [
-                        str "Det finnes overnatting både i Oslo og Drøbak - Folkvang er bare en halvtimes kjøretur fra Oslo og ligger fint til
-                        bussforbindelser. Velg det som passer deg best! Det blir også en egen buss fra Folkvang til
-                        Oslo sentrum ved festens slutt, kryss av i RSVP-skjemaet hvis man ønsker det."
-                    ]
-                ]
+//                div [] [
+//                    divider "home"
+//                    h3 [] [ str "Overnatting" ]
+//                    p [] [
+//                        str "Det finnes overnatting både i Oslo og Drøbak - Folkvang er bare en halvtimes kjøretur fra Oslo og ligger fint til
+//                        bussforbindelser. Velg det som passer deg best! Det blir også en egen buss fra Folkvang til
+//                        Oslo sentrum ved festens slutt, kryss av i RSVP-skjemaet hvis man ønsker det."
+//                    ]
+//                ]
                 div [] [
                     divider "envelope"
                     h3 [] [ str "RVSP" ]
                     p [] [
                         str
-                            "Under kan dere svare på om dere kommer eller ikke - skriv eventuelle allergier eller andre behov som kommentar. Svar utbedes innen 15. juni."
+                            "Under kan dere svare på om dere kommer eller ikke - skriv eventuelle allergier eller andre behov som kommentar. Svar utbedes innen 15. juli."
                     ]
                     br []
                     br []
@@ -366,9 +356,9 @@ let view (model: Model) dispatch =
                                  label [ (css (Styles.label @ [ Width'(pct 22) ])) ] [
                                      str "Kommer"
                                  ]
-                                 label [ (css (Styles.label @ [ Width'(pct 18) ])) ] [
-                                     str "Ønsker buss"
-                                 ]
+//                                 label [ (css (Styles.label @ [ Width'(pct 18) ])) ] [
+//                                     str "Ønsker buss"
+//                                 ]
                                 ] ]
                               @ (model.Guests
                                  |> List.map (fun g ->
@@ -420,18 +410,18 @@ let view (model: Model) dispatch =
                                              ]
                                          ]
                                          div [ css [ Width'(pct 18) ] ] [
-                                             button [ css
-                                                      <| Styles.button
-                                                          Styles.blue
-                                                             (if g.WantsBus = true then
-                                                                 Styles.Primary
-                                                              else
-                                                                  Styles.Secondary)
-
-                                                      OnClick
-                                                      <| fun e -> dispatch <| WantBusChanged(g.Id) ] [
-                                                 icon "check"
-                                             ]
+//                                             button [ css
+//                                                      <| Styles.button
+//                                                          Styles.blue
+//                                                             (if g.WantsBus = true then
+//                                                                 Styles.Primary
+//                                                              else
+//                                                                  Styles.Secondary)
+//
+//                                                      OnClick
+//                                                      <| fun e -> dispatch <| WantBusChanged(g.Id) ] [
+//                                                 icon "check"
+//                                             ]
                                                                                     ]
                                      ]
 
