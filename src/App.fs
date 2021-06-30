@@ -324,7 +324,7 @@ let view (model: Model) dispatch =
                     h3 [] [ str "RVSP" ]
                     p [] [
                         str
-                            "Under kan dere svare på om dere kommer eller ikke - skriv eventuelle allergier eller andre behov som kommentar. Svar utbedes innen 15. juli."
+                            "Under kan dere svare på om dere kommer eller ikke - skriv eventuelle allergier eller andre behov som kommentar. Svar utbedes innen 7. juli."
                     ]
                     br []
                     br []
