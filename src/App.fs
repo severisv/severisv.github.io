@@ -66,7 +66,8 @@ let updateGuest id fn model =
     { model with
           Guests =
               model.Guests
-              |> List.map (function
+              |> List.map
+                  (function
                   | g when g.Id = id -> fn g
                   | g -> g) }
 
@@ -74,7 +75,7 @@ let updateGuest id fn model =
 let url =
     let YXp6 = YXp6 |> List.map Z2dnZzI
 
-    
+
     sprintf
         "%s://%s.%s/services/%s/%s/%s"
         YXp6.[3]
@@ -89,17 +90,21 @@ let downloadAsync (guests: Guest list) =
 
         let guests =
             guests
-            |> List.map (fun g ->
-                sprintf
-                    "{\"title\":\"%s\",\"value\":\"%s - %s        Buss: %s\"}"
-                    g.Name
-                    (g.IsAttending
-                     |> Option.map (function
-                         | true -> "Kommer"
-                         | false -> "Kommer ikke")
-                     |> Option.defaultValue "Ikke svart")
-                    g.Allergies
-                    (match g.WantsBus with | true -> "Ja" | false -> "Nei"))
+            |> List.map
+                (fun g ->
+                    sprintf
+                        "{\"title\":\"%s\",\"value\":\"%s - %s        Buss: %s\"}"
+                        g.Name
+                        (g.IsAttending
+                         |> Option.map
+                             (function
+                             | true -> "Kommer"
+                             | false -> "Kommer ikke")
+                         |> Option.defaultValue "Ikke svart")
+                        g.Allergies
+                        (match g.WantsBus with
+                         | true -> "Ja"
+                         | false -> "Nei"))
             |> String.concat ","
 
         let requestData =
@@ -115,8 +120,8 @@ let downloadAsync (guests: Guest list) =
             |> Http.send
 
 
-        if result.statusCode > 299 || result.statusCode < 200
-        then failwith result.responseText
+        if result.statusCode > 299 || result.statusCode < 200 then
+            failwith result.responseText
 
         return result.responseText
     }
@@ -124,7 +129,8 @@ let downloadAsync (guests: Guest list) =
 
 let validate (model: Model) =
     model.Guests
-    |> List.map (function
+    |> List.map
+        (function
         | g when g.Name.Length < 2 -> Some "Husk å fylle inn navn på alle gjestene"
         | g when g.IsAttending.IsNone -> Some "Husk å krysse ja eller nei på alle gjestene"
         | _ -> Option.None)
@@ -152,7 +158,13 @@ let update message model =
     | IsAttendingChanged (id, value) ->
         updateGuest id (fun guest -> { guest with IsAttending = Some value }) model, Cmd.none
     | WantBusChanged (id) ->
-        updateGuest id (fun guest -> { guest with WantsBus = not guest.WantsBus }) model, Cmd.none    
+        updateGuest
+            id
+            (fun guest ->
+                { guest with
+                      WantsBus = not guest.WantsBus })
+            model,
+        Cmd.none
     | AddGuestClicked ->
         { model with
               Guests = model.Guests @ [ newGuest () ] },
@@ -207,18 +219,20 @@ let divider iconName =
     ]
 
 let p props =
-    p
-        (props
-         @ [ css [ MarginBottom'(rem 0.0)
-                   MarginTop'(rem 0.0)
-                   LineHeight'(rem 1.65) ] ])
+    p (
+        props
+        @ [ css [ MarginBottom'(rem 0.0)
+                  MarginTop'(rem 0.0)
+                  LineHeight'(rem 1.65) ] ]
+    )
 
 let h3 (props: CSSProperty list) =
-    h3
-        ([ css
-           <| [ MarginTop'(rem 0.0)
-                MarginBottom'(rem 1.0) ]
-              @ props ])
+    h3 (
+        [ css
+          <| [ MarginTop'(rem 0.0)
+               MarginBottom'(rem 1.0) ]
+             @ props ]
+    )
 
 let view (model: Model) dispatch =
 
@@ -238,27 +252,34 @@ let view (model: Model) dispatch =
                     str "VI GIFTER OSS!"
                 ]
                 h3 [ MarginTop'(rem 0.0) ] [
-                    str "7.AUGUST 2021"//, FOLKVANG, DRØBAK"
+                    str "7.AUGUST 2021" //, FOLKVANG, DRØBAK"
                 ]
             ]
         ]
         div [ css [ TextAlign.Center
                     MaxWidth'(rem 32.0)
                     Margin.Auto ] ] [
-                div [] [
-                    h3 [] [ str "Oppdatering (27. juni)" ]
-                    p [] [
-                        str "Det blir bryllup 7. august! Vi har bestemt oss for å flytte festen fra Folkvang til et sted hvor vi kan gjennomføre med gjeldende bestemmelser.
-                        Detaljene er ikke fullstendig spikret, men vi føles oss trygge på at det blir feiring med mindre det blir gjeninnført strengere restriksjoner enn de som gjelder i dag.
-                        Feiringen vil fremdeles finne sted i Oslo-området - vi kommer med bedre informasjon veldig snart!"
-                        br []
-                        br []
-                    ]                   
-                    divider "heart"
-    
+            div [] [
+                h3 [] [ str "Oppdatering (30. juni)" ]
+                p [] [
+                    str
+                        "Det blir bryllup 7. august, men på nytt sted! Stedet er Kavringen Marina på Nesodden.
+                        Vi planlegger å chartre en båt slik at det blir felles reise med båt fra Oslo sentrum kl 12, og tilbake igjen kl 24."
+                    br []
+                    br []
+                    str
+                        "Vi trenger å vite hvor mange som kommer - så bla deg ned til RSVP og svar på om du kommmer eller ikke."
+                    br []
+                    br []
+                    str "Det kommer litt mer utfyllende informasjon etterhvert."
+                    br []
+                    br []
                 ]
+                divider "heart"
+
+            ]
         ]
-        
+
         div [ css Styles.container ] [
             div [ css [ MediaQuery [ Media.MaxWidth <| px 600 ] [
                             Display.None
@@ -271,7 +292,8 @@ let view (model: Model) dispatch =
                             MarginRight'(rem 1.0) ] ] [
                     h3 [] [ str "24.01.2015" ]
                     p [] [
-                        str "Etter å ha unngått hverandre i flere år i Trondhem, møttes Tone og Severin endelig gjennom en felles
+                        str
+                            "Etter å ha unngått hverandre i flere år i Trondhem, møttes Tone og Severin endelig gjennom en felles
                        venn etter at begge hadde flyttet til Oslo. 2 år senere flyttet de sammen i sin første leilighet på
                        Grunerløkka."
                     ]
@@ -282,7 +304,7 @@ let view (model: Model) dispatch =
                             MarginLeft'(rem 1.0) ] ] [
                     h3 [] [ str "07.08.2021" ]
                     p [] [
-                        str "Vi planlegger å gifte oss i august 2021 - gitt at koronaviruset jekker seg ned litt."
+                        str "Vi skal gifte oss 7.august 2021 - nå som koronaviruset har jekka seg ned litt."
                     ]
                     p [] [
                         str "Planen for dagen formes, og denne nettsiden vil oppdateres med nyttig informasjon."
@@ -296,9 +318,7 @@ let view (model: Model) dispatch =
                     divider "heart"
                     h3 [] [ str "Bryllupet" ]
                     p [] [
-                        str "Festen avholdes 7.august 2021 i Oslo-området."
-                        br []
-                        str "Informasjon om hvor og når kommer veldig snart."
+                        str "Vielsen og festen avholdes 7.august 2021 på Kavringen Marina ved Nesodden."
                     ]
                 ]
                 div [] [
@@ -306,19 +326,36 @@ let view (model: Model) dispatch =
                     h3 [] [ str "Korona" ]
                     p [] [
                         str
-                            "Vi vil gjennomføre i henhold til gjeldende forskrift. Nøyaktig informasjon om hva det innebærer kommer etter at vi har fått avtalt med arrangøren."                       
-                        
+                            "Vi vil gjennomføre i henhold til gjeldende forskrift. Nøyaktig informasjon om hva det innebærer kommer etter at vi har fått avtalt med arrangøren."
+
                     ]
                 ]
-//                div [] [
-//                    divider "home"
-//                    h3 [] [ str "Overnatting" ]
-//                    p [] [
-//                        str "Det finnes overnatting både i Oslo og Drøbak - Folkvang er bare en halvtimes kjøretur fra Oslo og ligger fint til
-//                        bussforbindelser. Velg det som passer deg best! Det blir også en egen buss fra Folkvang til
-//                        Oslo sentrum ved festens slutt, kryss av i RSVP-skjemaet hvis man ønsker det."
-//                    ]
-//                ]
+                div [] [
+                    divider "home"
+                    h3 [] [ str "Overnatting" ]
+                    p [] [
+                        str
+                            "Det lureste er å finne et sted å bo i Oslo Sentrum og bli med på felles båttransport til og fra festen.
+Det er også mulig å dra tidligere på egenhånd, men da er det lurt å være litt forberedt. Se under.
+"
+                    ]
+                ]
+                div [] [
+                    divider "bus"
+                    h3 [] [ str "Adkomst" ]
+                    p [] [
+                        str
+                            "Kavringen er en bitteliten øy på vestsiden av Nesodden. Det går en liten gangbro over til fastlandet
+                            , som tar deg til en betongsti med endel trappetrinn oppover til boligområdet Flaskebekktjernet på Nesodden
+                            . Her finner du buss til rutebåt som går hver halvtime til Aker Brygge
+                            . Velger du denne måten å dra på, må du huske å ta med gode sko til den bratte stien!
+                        "
+                        br []
+                        br []
+                        str
+                            "For de som ønsker å komme med egen bil eller båt kan det hende det er mulig å parkere disse i nærheten - vi driver og undersøker!"
+                    ]
+                ]
                 div [] [
                     divider "envelope"
                     h3 [] [ str "RVSP" ]
@@ -341,76 +378,82 @@ let view (model: Model) dispatch =
                              []
                              ([ div [ css [ Display.Flex
                                             MarginBottom'(rem 0.5) ] ] [
-                                 label [ (css
-                                              (Styles.label
-                                               @ [ Width'(pct 27)
-                                                   MarginRight'(rem 1.0) ])) ] [
-                                     str "Navn"
-                                 ]
-                                 label [ (css
-                                              (Styles.label
-                                               @ [ Width'(pct 27)
-                                                   MarginRight'(rem 1.0) ])) ] [
-                                     str "Kommentar"
-                                 ]
-                                 label [ (css (Styles.label @ [ Width'(pct 22) ])) ] [
-                                     str "Kommer"
-                                 ]
-//                                 label [ (css (Styles.label @ [ Width'(pct 18) ])) ] [
+                                    label [ (css (
+                                                Styles.label
+                                                @ [ Width'(pct 27)
+                                                    MarginRight'(rem 1.0) ]
+                                            )) ] [
+                                        str "Navn"
+                                    ]
+                                    label [ (css (
+                                                Styles.label
+                                                @ [ Width'(pct 27)
+                                                    MarginRight'(rem 1.0) ]
+                                            )) ] [
+                                        str "Kommentar"
+                                    ]
+                                    label [ (css (Styles.label @ [ Width'(pct 22) ])) ] [
+                                        str "Kommer"
+                                    ]
+                                //                                 label [ (css (Styles.label @ [ Width'(pct 18) ])) ] [
 //                                     str "Ønsker buss"
 //                                 ]
                                 ] ]
                               @ (model.Guests
-                                 |> List.map (fun g ->
-                                     div [ css [ Display.Flex
-                                                 AlignItems.Center
-                                                 TextAlign.Left
-                                                 MarginBottom'(rem 0.5) ] ] [
-                                         input [ css
-                                                     (Styles.input
-                                                      @ [ Width'(pct 27)
-                                                          MarginRight'(rem 1.0) ])
-                                                 Props.Type "text"
-                                                 Value g.Name
-                                                 OnChange
-                                                 <| fun e -> dispatch <| NameChanged(g.Id, e.Value) ]
+                                 |> List.map
+                                     (fun g ->
+                                         div [ css [ Display.Flex
+                                                     AlignItems.Center
+                                                     TextAlign.Left
+                                                     MarginBottom'(rem 0.5) ] ] [
+                                             input [ css (
+                                                         Styles.input
+                                                         @ [ Width'(pct 27)
+                                                             MarginRight'(rem 1.0) ]
+                                                     )
+                                                     Props.Type "text"
+                                                     Value g.Name
+                                                     OnChange
+                                                     <| fun e -> dispatch <| NameChanged(g.Id, e.Value) ]
 
-                                         input [ css
-                                                     (Styles.input
-                                                      @ [ Width'(pct 27)
-                                                          MarginRight'(rem 1.0) ])
-                                                 Props.Type "text"
-                                                 Value g.Allergies
-                                                 OnChange
-                                                 <| fun e -> dispatch <| AllergiesChanged(g.Id, e.Value) ]
-                                         div [ css [ Width'(pct 22) ] ] [
-                                             button [ css
-                                                      <| Styles.button
-                                                          Styles.green
-                                                             (if g.IsAttending = Some true then
-                                                                 Styles.Primary
-                                                              else
-                                                                  Styles.Secondary)
-
-                                                      OnClick
-                                                      <| fun e -> dispatch <| IsAttendingChanged(g.Id, true) ] [
-                                                 icon "check"
-                                             ]
-                                             button [ css
-                                                          (Styles.button
-                                                              Styles.pink
-                                                               (if g.IsAttending = Some false then
+                                             input [ css (
+                                                         Styles.input
+                                                         @ [ Width'(pct 27)
+                                                             MarginRight'(rem 1.0) ]
+                                                     )
+                                                     Props.Type "text"
+                                                     Value g.Allergies
+                                                     OnChange
+                                                     <| fun e -> dispatch <| AllergiesChanged(g.Id, e.Value) ]
+                                             div [ css [ Width'(pct 22) ] ] [
+                                                 button [ css
+                                                          <| Styles.button
+                                                              Styles.green
+                                                              (if g.IsAttending = Some true then
                                                                    Styles.Primary
-                                                                else
-                                                                    Styles.Secondary)
-                                                           @ [ MarginLeft'(rem 0.25) ])
-                                                      OnClick
-                                                      <| fun e -> dispatch <| IsAttendingChanged(g.Id, false) ] [
-                                                 icon "times"
+                                                               else
+                                                                   Styles.Secondary)
+
+                                                          OnClick
+                                                          <| fun e -> dispatch <| IsAttendingChanged(g.Id, true) ] [
+                                                     icon "check"
+                                                 ]
+                                                 button [ css (
+                                                              Styles.button
+                                                                  Styles.pink
+                                                                  (if g.IsAttending = Some false then
+                                                                       Styles.Primary
+                                                                   else
+                                                                       Styles.Secondary)
+                                                              @ [ MarginLeft'(rem 0.25) ]
+                                                          )
+                                                          OnClick
+                                                          <| fun e -> dispatch <| IsAttendingChanged(g.Id, false) ] [
+                                                     icon "times"
+                                                 ]
                                              ]
-                                         ]
-                                         div [ css [ Width'(pct 18) ] ] [
-//                                             button [ css
+                                             div [ css [ Width'(pct 18) ] ] [
+                                             //                                             button [ css
 //                                                      <| Styles.button
 //                                                          Styles.blue
 //                                                             (if g.WantsBus = true then
@@ -422,15 +465,15 @@ let view (model: Model) dispatch =
 //                                                      <| fun e -> dispatch <| WantBusChanged(g.Id) ] [
 //                                                 icon "check"
 //                                             ]
-                                                                                    ]
-                                     ]
+                                             ]
+                                         ]
 
 
 
 
 
 
-                                     ))
+                                         ))
                                 @ [ div [ css [ TextAlign.Left ] ] [
                                         button [ css Styles.link
                                                  OnClick <| fun _ -> dispatch AddGuestClicked ] [
@@ -440,27 +483,29 @@ let view (model: Model) dispatch =
                                     ]
 
                                     (message
-                                     |> Option.map (fun _ ->
-                                         p [] [
-                                             span [ css [ Color' Styles.pinkDark
-                                                          FontWeight.Bold ] ] [
-                                                 str "Noe gikk galt!"
-                                             ]
-                                             p [ css [ Color' Styles.black ] ] [
-                                                 str
-                                                     "Prøv igjen, prøv en annen nettleser eller bare send en god gammeldags melding 🙃"
-                                             ]
-                                             br []
-                                         ])
+                                     |> Option.map
+                                         (fun _ ->
+                                             p [] [
+                                                 span [ css [ Color' Styles.pinkDark
+                                                              FontWeight.Bold ] ] [
+                                                     str "Noe gikk galt!"
+                                                 ]
+                                                 p [ css [ Color' Styles.black ] ] [
+                                                     str
+                                                         "Prøv igjen, prøv en annen nettleser eller bare send en god gammeldags melding 🙃"
+                                                 ]
+                                                 br []
+                                             ])
                                      |> Option.defaultValue (fragment [] []))
 
                                     (model.ValidationMessage
-                                     |> Option.map (fun msg ->
-                                         div [ css [ Margin'(rem 1.0)
-                                                     Color' Styles.pinkDark
-                                                     FontWeight.Bold ] ] [
-                                             str msg
-                                         ])
+                                     |> Option.map
+                                         (fun msg ->
+                                             div [ css [ Margin'(rem 1.0)
+                                                         Color' Styles.pinkDark
+                                                         FontWeight.Bold ] ] [
+                                                 str msg
+                                             ])
                                      |> Option.defaultValue (fragment [] []))
 
                                     div [ css [ MarginTop'(rem 0.5) ] ] [
@@ -469,7 +514,10 @@ let view (model: Model) dispatch =
                                                  <| (Styles.button Styles.blue Styles.Primary)
                                                     @ [ FontSize'(rem 1.0) ]
                                                  OnClick <| fun _ -> dispatch SendClicked ] [
-                                            (if model.IsSending then icon "spinner fa-spin" else str "Send")
+                                            (if model.IsSending then
+                                                 icon "spinner fa-spin"
+                                             else
+                                                 str "Send")
                                         ]
                                     ] ])
 
@@ -492,6 +540,9 @@ let view (model: Model) dispatch =
                             str "Herman"
                         ]
                         str " (herman.l.hauge at gmail.com)."
+                        br []
+                        br []
+                        str "Har du lyst til å holde tale? Send mail til Herman"
                     ]
                     br []
                     br []
@@ -521,9 +572,27 @@ let view (model: Model) dispatch =
                 div [] [
                     divider "gift"
                     h3 [] [ str "Ønskeliste" ]
-                    p [] [ str "Kommer senere!" ]
+                    p [] [
+                        str "Du trenger ikke ta med gave, men om du har veldig lyst har vi registrert ønskeliste på "
+                        a [ css Styles.link
+                            Target "_blank"
+                            Href
+                                "https://www.illumsbolighus.no/on/demandware.store/Sites-illums_bolighus_no-Site/nb_NO/GiftRegistry-ShowOthers?id=18f74dd52e7fe679db1ad226f9" ] [
+                            str "Illums Bolighus"
+                        ]
+
+                        str " og "
+                        a [ css Styles.link
+                            Target "_blank"
+                            Href "https://jernia.no/wishlist/6f2df464-6a56-4e0c-8d3a-c648094055e6" ] [
+                            str "Jernia"
+                        ]
+                        str ". Husk å fortelle butikken hvis du kjøper noe fra gavelisten, så blir den oppdatert."
+
+
+                    ]
                 ]
-//                div [] [
+            //                div [] [
 //                    divider "question"
 //                    h3 [] [ str "Spørsmål & Svar" ]
 //                    p [] [ str "Kommer senere!" ]
