@@ -588,6 +588,9 @@ Det er også mulig å dra tidligere på egenhånd, men da er det lurt å være l
                             str "Jernia"
                         ]
                         str ". Husk å fortelle butikken hvis du kjøper noe fra gavelisten, så blir den oppdatert."
+                        br []
+                        str
+                            "Noen av tingene på ønskelisten er markert som utsolgt, dette betyr bare at det kun selges i butikk, ikke på nett."
 
 
                     ]
