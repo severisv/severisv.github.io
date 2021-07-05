@@ -264,7 +264,7 @@ let view (model: Model) dispatch =
                 p [] [
                     str
                         "Det blir bryllup 7. august, men på nytt sted! Stedet er Kavringen Marina på Nesodden.
-                        Vi planlegger å chartre en båt slik at det blir felles reise med båt fra Oslo sentrum kl 12, og tilbake igjen kl 24."
+                        Vi prøver å chartre en båt slik at det blir felles reise med båt fra Oslo sentrum kl 12, og tilbake igjen kl 24."
                     br []
                     br []
                     str
@@ -345,15 +345,29 @@ Det er også mulig å dra tidligere på egenhånd, men da er det lurt å være l
                     h3 [] [ str "Adkomst" ]
                     p [] [
                         str
-                            "Kavringen er en bitteliten øy på vestsiden av Nesodden. Det går en liten gangbro over til fastlandet
-                            , som tar deg til en betongsti med endel trappetrinn oppover til boligområdet Flaskebekktjernet på Nesodden
-                            . Her finner du buss til rutebåt som går hver halvtime til Aker Brygge
+                            "Kavringen er en bitteliten øy på vestsiden av Nesodden. Vi prøver å få til felles båttransport fra Oslo. Hvis man kommer eller drar via land går det en liten gangbro over til fastlandet
+                            , som tar deg til en betongsti med endel trappetrinn oppover til boligområdet Flaskebekktjernet. Her finner du buss til rutebåt som går hver halvtime til Aker Brygge
                             . Velger du denne måten å dra på, må du huske å ta med gode sko til den bratte stien!
                         "
                         br []
                         br []
+                        str "Det er også mulig å ta egen bil eller båt."
+                        br []
+                        br []
                         str
-                            "For de som ønsker å komme med egen bil eller båt kan det hende det er mulig å parkere disse i nærheten - vi driver og undersøker!"
+                            "For de som kommer i bil er det mulig å parkere ved Flaskebekktjernet. Dette er en gratis utfartsparkering, men ingen garanti for at det er plass. Gi beskjed hvis du har tenkt til å parkere her, siden det er begrenset med plass trenger vi en viss oversikt."
+                        br []
+                        br []
+                        str
+                            "For de som kommer i båt er er det mulig å legge til på Kavringen - gi beskjed hvis du planlegger å komme i egen båt, så vi får avtalt med de som har marinaen der."
+                    ]
+                ]
+                div [] [
+                    divider "user-tie"
+                    h3 [] [ str "Antrekk" ]
+                    p [] [
+                        str
+                            "Pent / sommerpent. Hvis det blir veldig varmt er det helt innafor å kle seg deretter. Hvis det blir fare for regn er det lurt å ha paraply - vielsen er utendørs."
                     ]
                 ]
                 div [] [
