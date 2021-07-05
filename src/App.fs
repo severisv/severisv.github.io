@@ -367,7 +367,7 @@ Det er også mulig å dra tidligere på egenhånd, men da er det lurt å være l
                     h3 [] [ str "Antrekk" ]
                     p [] [
                         str
-                            "Pent / sommerpent. Hvis det blir veldig varmt er det helt innafor å kle seg deretter. Hvis det blir fare for regn er det lurt å ha paraply - vielsen er utendørs."
+                            "Dress / sommerpent. Hvis det blir veldig varmt er det helt innafor å kle seg deretter. Hvis det blir fare for regn er det lurt å ha paraply - vielsen er utendørs."
                     ]
                 ]
                 div [] [
