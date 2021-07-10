@@ -267,11 +267,7 @@ let view (model: Model) dispatch =
                         Vi prøver å chartre en båt slik at det blir felles reise med båt fra Oslo sentrum kl 12, og tilbake igjen kl 24."
                     br []
                     br []
-                    str
-                        "Vi trenger å vite hvor mange som kommer - så bla deg ned til RSVP og svar på om du kommmer eller ikke."
-                    br []
-                    br []
-                    str "Det kommer litt mer utfyllende informasjon etterhvert."
+                    str "Vi oppdaterer med utfyllende informasjon her etterhvert som ting faller på plass."
                     br []
                     br []
                 ]
@@ -360,6 +356,9 @@ Det er også mulig å dra tidligere på egenhånd, men da er det lurt å være l
                         br []
                         str
                             "For de som kommer i båt er er det mulig å legge til på Kavringen - gi beskjed hvis du planlegger å komme i egen båt, så vi får avtalt med de som har marinaen der."
+                        br []
+                        br []
+                        str "Vi legger ut et kart over de ulike veier inn etter at vi har fått ordnet med båttransport."
                     ]
                 ]
                 div [] [
@@ -603,9 +602,12 @@ Det er også mulig å dra tidligere på egenhånd, men da er det lurt å være l
                         ]
                         str ". Husk å fortelle butikken hvis du kjøper noe fra gavelisten, så blir den oppdatert."
                         br []
+                        br []
                         str
-                            "Noen av tingene på ønskelisten er markert som utsolgt, dette betyr bare at det kun selges i butikk, ikke på nett."
-
+                            "Dessverre har Illums noen tekniske problemer. UTSOLGT betyr ikke at varen er utsolgt i butikk, eller at varen er kjøpt av andre gjester.
+                            Du kan sjekke varelager i butikk på Illums nettsider, og spørre i butikk hvor mange som er igjen på ønskelisten. Illums beklager, og advarer at
+                            i sommer med mye vikarer kan det være vanskelig å få sjekket også for dem i butikken, men det går bra, blir det en
+                            for mye eller lite her og der så ordner vi det senere."
 
                     ]
                 ]
