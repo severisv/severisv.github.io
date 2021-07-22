@@ -252,7 +252,7 @@ let view (model: Model) dispatch =
                     str "VI GIFTER OSS!"
                 ]
                 h3 [ MarginTop'(rem 0.0) ] [
-                    str "7.AUGUST 2021" //, FOLKVANG, DRØBAK"
+                    str "7.AUGUST 2021, KAVRINGEN, NESODDEN"
                 ]
             ]
         ]
@@ -260,16 +260,10 @@ let view (model: Model) dispatch =
                     MaxWidth'(rem 32.0)
                     Margin.Auto ] ] [
             div [] [
-                h3 [] [ str "Oppdatering (30. juni)" ]
+                h3 [] [ str "Oppdatering (21. juli)" ]
                 p [] [
                     str
-                        "Det blir bryllup 7. august, men på nytt sted! Stedet er Kavringen Marina på Nesodden.
-                        Vi prøver å chartre en båt slik at det blir felles reise med båt fra Oslo sentrum kl 12, og tilbake igjen kl 24."
-                    br []
-                    br []
-                    str "Vi oppdaterer med utfyllende informasjon her etterhvert som ting faller på plass."
-                    br []
-                    br []
+                        "Vi har nå fått ordnet båt slik at det blir felles reise med båt fra Rådhuskaia i Oslo sentrum. Vi venter på endelig bekreftelse, men vi er 97% sikre på at avreise blir kl 12:45, og hjemreise kl 01."
                 ]
                 divider "heart"
 
@@ -322,7 +316,7 @@ let view (model: Model) dispatch =
                     h3 [] [ str "Korona" ]
                     p [] [
                         str
-                            "Vi vil gjennomføre i henhold til gjeldende forskrift. Nøyaktig informasjon om hva det innebærer kommer etter at vi har fått avtalt med arrangøren."
+                            "Vi vil gjennomføre i henhold til gjeldende forskrift. De fleste gjestene er vaksinert, men vi oppfordrer generelt til å bruke huet og følge rådene "
 
                     ]
                 ]
@@ -358,7 +352,13 @@ Det er også mulig å dra tidligere på egenhånd, men da er det lurt å være l
                             "For de som kommer i båt er er det mulig å legge til på Kavringen - gi beskjed hvis du planlegger å komme i egen båt, så vi får avtalt med de som har marinaen der."
                         br []
                         br []
-                        str "Vi legger ut et kart over de ulike veier inn etter at vi har fått ordnet med båttransport."
+                        img [ Src "/assets/kart.png"
+                              css [ Width' <| pct 160
+                                    MarginLeft' <| pct -30
+                                    MediaQuery [ Media.MaxWidth <| px 1000 ] [
+                                        Width' <| pct 100
+                                        MarginLeft' <| pct 0
+                                    ] ] ]
                     ]
                 ]
                 div [] [
@@ -370,172 +370,188 @@ Det er også mulig å dra tidligere på egenhånd, men da er det lurt å være l
                     ]
                 ]
                 div [] [
-                    divider "envelope"
-                    h3 [] [ str "RVSP" ]
+                    divider "utensils"
+                    h3 [] [ str "Servering" ]
                     p [] [
                         str
-                            "Under kan dere svare på om dere kommer eller ikke - skriv eventuelle allergier eller andre behov som kommentar. Svar utbedes innen 7. juli."
+                            "Det blir servert 3 retters middag med drikke til, men husk at det er en lang dag, så ikke hopp over frokosten. Etter middagen er det mulig å kjøpe drikke i baren."
                     ]
-                    br []
-                    br []
-                    (match model.Result with
-                     | Ok () ->
-                         fragment [] [
-                             h1 [ css [ Color' Styles.green ] ] [
-                                 str "Takk! 💗"
-                             ]
-                             br []
-                         ]
-                     | Error message ->
-                         div
-                             []
-                             ([ div [ css [ Display.Flex
-                                            MarginBottom'(rem 0.5) ] ] [
-                                    label [ (css (
-                                                Styles.label
-                                                @ [ Width'(pct 27)
-                                                    MarginRight'(rem 1.0) ]
-                                            )) ] [
-                                        str "Navn"
-                                    ]
-                                    label [ (css (
-                                                Styles.label
-                                                @ [ Width'(pct 27)
-                                                    MarginRight'(rem 1.0) ]
-                                            )) ] [
-                                        str "Kommentar"
-                                    ]
-                                    label [ (css (Styles.label @ [ Width'(pct 22) ])) ] [
-                                        str "Kommer"
-                                    ]
-                                //                                 label [ (css (Styles.label @ [ Width'(pct 18) ])) ] [
-//                                     str "Ønsker buss"
-//                                 ]
-                                ] ]
-                              @ (model.Guests
-                                 |> List.map
-                                     (fun g ->
-                                         div [ css [ Display.Flex
-                                                     AlignItems.Center
-                                                     TextAlign.Left
-                                                     MarginBottom'(rem 0.5) ] ] [
-                                             input [ css (
-                                                         Styles.input
-                                                         @ [ Width'(pct 27)
-                                                             MarginRight'(rem 1.0) ]
-                                                     )
-                                                     Props.Type "text"
-                                                     Value g.Name
-                                                     OnChange
-                                                     <| fun e -> dispatch <| NameChanged(g.Id, e.Value) ]
-
-                                             input [ css (
-                                                         Styles.input
-                                                         @ [ Width'(pct 27)
-                                                             MarginRight'(rem 1.0) ]
-                                                     )
-                                                     Props.Type "text"
-                                                     Value g.Allergies
-                                                     OnChange
-                                                     <| fun e -> dispatch <| AllergiesChanged(g.Id, e.Value) ]
-                                             div [ css [ Width'(pct 22) ] ] [
-                                                 button [ css
-                                                          <| Styles.button
-                                                              Styles.green
-                                                              (if g.IsAttending = Some true then
-                                                                   Styles.Primary
-                                                               else
-                                                                   Styles.Secondary)
-
-                                                          OnClick
-                                                          <| fun e -> dispatch <| IsAttendingChanged(g.Id, true) ] [
-                                                     icon "check"
-                                                 ]
-                                                 button [ css (
-                                                              Styles.button
-                                                                  Styles.pink
-                                                                  (if g.IsAttending = Some false then
-                                                                       Styles.Primary
-                                                                   else
-                                                                       Styles.Secondary)
-                                                              @ [ MarginLeft'(rem 0.25) ]
-                                                          )
-                                                          OnClick
-                                                          <| fun e -> dispatch <| IsAttendingChanged(g.Id, false) ] [
-                                                     icon "times"
-                                                 ]
-                                             ]
-                                             div [ css [ Width'(pct 18) ] ] [
-                                             //                                             button [ css
-//                                                      <| Styles.button
-//                                                          Styles.blue
-//                                                             (if g.WantsBus = true then
-//                                                                 Styles.Primary
-//                                                              else
-//                                                                  Styles.Secondary)
-//
-//                                                      OnClick
-//                                                      <| fun e -> dispatch <| WantBusChanged(g.Id) ] [
-//                                                 icon "check"
-//                                             ]
-                                             ]
-                                         ]
-
-
-
-
-
-
-                                         ))
-                                @ [ div [ css [ TextAlign.Left ] ] [
-                                        button [ css Styles.link
-                                                 OnClick <| fun _ -> dispatch AddGuestClicked ] [
-                                            icon "plus"
-                                            str " Legg til gjest"
-                                        ]
-                                    ]
-
-                                    (message
-                                     |> Option.map
-                                         (fun _ ->
-                                             p [] [
-                                                 span [ css [ Color' Styles.pinkDark
-                                                              FontWeight.Bold ] ] [
-                                                     str "Noe gikk galt!"
-                                                 ]
-                                                 p [ css [ Color' Styles.black ] ] [
-                                                     str
-                                                         "Prøv igjen, prøv en annen nettleser eller bare send en god gammeldags melding 🙃"
-                                                 ]
-                                                 br []
-                                             ])
-                                     |> Option.defaultValue (fragment [] []))
-
-                                    (model.ValidationMessage
-                                     |> Option.map
-                                         (fun msg ->
-                                             div [ css [ Margin'(rem 1.0)
-                                                         Color' Styles.pinkDark
-                                                         FontWeight.Bold ] ] [
-                                                 str msg
-                                             ])
-                                     |> Option.defaultValue (fragment [] []))
-
-                                    div [ css [ MarginTop'(rem 0.5) ] ] [
-                                        button [ Disabled(model.IsSending)
-                                                 css
-                                                 <| (Styles.button Styles.blue Styles.Primary)
-                                                    @ [ FontSize'(rem 1.0) ]
-                                                 OnClick <| fun _ -> dispatch SendClicked ] [
-                                            (if model.IsSending then
-                                                 icon "spinner fa-spin"
-                                             else
-                                                 str "Send")
-                                        ]
-                                    ] ])
-
-                    )
                 ]
+                div [] [
+                    divider "camera"
+                    h3 [] [ str "Bilder" ]
+                    p [] [
+                        str
+                            "Vi har kun fotograf under og rett etter vielsen, så etter det setter vi veldig pris på om alle tar bilder til de blir flaue og sender noen til oss etterpå (severin at sverdvik.no eller tonewermundsen at gmail.com) ♥"
+                    ]
+                ]
+                //                 div [] [
+//                     divider "envelope"
+//                     h3 [] [ str "RVSP" ]
+//                     p [] [
+//                         str
+//                             "Under kan dere svare på om dere kommer eller ikke - skriv eventuelle allergier eller andre behov som kommentar. Svar utbedes innen 7. juli."
+//                     ]
+//                     br []
+//                     br []
+//                     (match model.Result with
+//                      | Ok () ->
+//                          fragment [] [
+//                              h1 [ css [ Color' Styles.green ] ] [
+//                                  str "Takk! 💗"
+//                              ]
+//                              br []
+//                          ]
+//                      | Error message ->
+//                          div
+//                              []
+//                              ([ div [ css [ Display.Flex
+//                                             MarginBottom'(rem 0.5) ] ] [
+//                                     label [ (css (
+//                                                 Styles.label
+//                                                 @ [ Width'(pct 27)
+//                                                     MarginRight'(rem 1.0) ]
+//                                             )) ] [
+//                                         str "Navn"
+//                                     ]
+//                                     label [ (css (
+//                                                 Styles.label
+//                                                 @ [ Width'(pct 27)
+//                                                     MarginRight'(rem 1.0) ]
+//                                             )) ] [
+//                                         str "Kommentar"
+//                                     ]
+//                                     label [ (css (Styles.label @ [ Width'(pct 22) ])) ] [
+//                                         str "Kommer"
+//                                     ]
+//                                 //                                 label [ (css (Styles.label @ [ Width'(pct 18) ])) ] [
+// //                                     str "Ønsker buss"
+// //                                 ]
+//                                 ] ]
+//                               @ (model.Guests
+//                                  |> List.map
+//                                      (fun g ->
+//                                          div [ css [ Display.Flex
+//                                                      AlignItems.Center
+//                                                      TextAlign.Left
+//                                                      MarginBottom'(rem 0.5) ] ] [
+//                                              input [ css (
+//                                                          Styles.input
+//                                                          @ [ Width'(pct 27)
+//                                                              MarginRight'(rem 1.0) ]
+//                                                      )
+//                                                      Props.Type "text"
+//                                                      Value g.Name
+//                                                      OnChange
+//                                                      <| fun e -> dispatch <| NameChanged(g.Id, e.Value) ]
+
+                //                                              input [ css (
+//                                                          Styles.input
+//                                                          @ [ Width'(pct 27)
+//                                                              MarginRight'(rem 1.0) ]
+//                                                      )
+//                                                      Props.Type "text"
+//                                                      Value g.Allergies
+//                                                      OnChange
+//                                                      <| fun e -> dispatch <| AllergiesChanged(g.Id, e.Value) ]
+//                                              div [ css [ Width'(pct 22) ] ] [
+//                                                  button [ css
+//                                                           <| Styles.button
+//                                                               Styles.green
+//                                                               (if g.IsAttending = Some true then
+//                                                                    Styles.Primary
+//                                                                else
+//                                                                    Styles.Secondary)
+
+                //                                                           OnClick
+//                                                           <| fun e -> dispatch <| IsAttendingChanged(g.Id, true) ] [
+//                                                      icon "check"
+//                                                  ]
+//                                                  button [ css (
+//                                                               Styles.button
+//                                                                   Styles.pink
+//                                                                   (if g.IsAttending = Some false then
+//                                                                        Styles.Primary
+//                                                                    else
+//                                                                        Styles.Secondary)
+//                                                               @ [ MarginLeft'(rem 0.25) ]
+//                                                           )
+//                                                           OnClick
+//                                                           <| fun e -> dispatch <| IsAttendingChanged(g.Id, false) ] [
+//                                                      icon "times"
+//                                                  ]
+//                                              ]
+//                                              div [ css [ Width'(pct 18) ] ] [
+//                                              //                                             button [ css
+// //                                                      <| Styles.button
+// //                                                          Styles.blue
+// //                                                             (if g.WantsBus = true then
+// //                                                                 Styles.Primary
+// //                                                              else
+// //                                                                  Styles.Secondary)
+// //
+// //                                                      OnClick
+// //                                                      <| fun e -> dispatch <| WantBusChanged(g.Id) ] [
+// //                                                 icon "check"
+// //                                             ]
+//                                              ]
+//                                          ]
+
+
+
+
+
+
+                //                                          ))
+//                                 @ [ div [ css [ TextAlign.Left ] ] [
+//                                         button [ css Styles.link
+//                                                  OnClick <| fun _ -> dispatch AddGuestClicked ] [
+//                                             icon "plus"
+//                                             str " Legg til gjest"
+//                                         ]
+//                                     ]
+
+                //                                     (message
+//                                      |> Option.map
+//                                          (fun _ ->
+//                                              p [] [
+//                                                  span [ css [ Color' Styles.pinkDark
+//                                                               FontWeight.Bold ] ] [
+//                                                      str "Noe gikk galt!"
+//                                                  ]
+//                                                  p [ css [ Color' Styles.black ] ] [
+//                                                      str
+//                                                          "Prøv igjen, prøv en annen nettleser eller bare send en god gammeldags melding 🙃"
+//                                                  ]
+//                                                  br []
+//                                              ])
+//                                      |> Option.defaultValue (fragment [] []))
+
+                //                                     (model.ValidationMessage
+//                                      |> Option.map
+//                                          (fun msg ->
+//                                              div [ css [ Margin'(rem 1.0)
+//                                                          Color' Styles.pinkDark
+//                                                          FontWeight.Bold ] ] [
+//                                                  str msg
+//                                              ])
+//                                      |> Option.defaultValue (fragment [] []))
+
+                //                                     div [ css [ MarginTop'(rem 0.5) ] ] [
+//                                         button [ Disabled(model.IsSending)
+//                                                  css
+//                                                  <| (Styles.button Styles.blue Styles.Primary)
+//                                                     @ [ FontSize'(rem 1.0) ]
+//                                                  OnClick <| fun _ -> dispatch SendClicked ] [
+//                                             (if model.IsSending then
+//                                                  icon "spinner fa-spin"
+//                                              else
+//                                                  str "Send")
+//                                         ]
+//                                     ] ])
+
+                //                     )
+//                 ]
                 div [] [
                     divider "user-tie"
                     h3 [] [ str "Viktige personer" ]
