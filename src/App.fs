@@ -260,13 +260,12 @@ let view (model: Model) dispatch =
                     MaxWidth'(rem 32.0)
                     Margin.Auto ] ] [
             div [] [
-                h3 [] [ str "Oppdatering (21. juli)" ]
+                h3 [] [ str "Oppdatering (26. juli)" ]
                 p [] [
                     str
-                        "Vi har nå fått ordnet båt slik at det blir felles reise med båt fra Rådhuskaia i Oslo sentrum. Vi venter på endelig bekreftelse, men vi er 97% sikre på at avreise blir kl 12:45, og hjemreise kl 01."
+                        "Vi har nå fått ordnet båt slik at det blir felles reise med båt fra Rådhuskaia i Oslo sentrum kl 12:45, og hjemreise kl 01:00."
                 ]
-                divider "heart"
-
+            //     divider "heart"
             ]
         ]
 
@@ -276,30 +275,30 @@ let view (model: Model) dispatch =
                         ]
                         Display.Flex
                         JustifyContent.Center ] ] [
-                div [ css [ TextAlign.Right
-                            FlexGrow'(CssFloat 1.0)
-                            FlexBasis'(px 0)
-                            MarginRight'(rem 1.0) ] ] [
-                    h3 [] [ str "24.01.2015" ]
-                    p [] [
-                        str
-                            "Etter å ha unngått hverandre i flere år i Trondhem, møttes Tone og Severin endelig gjennom en felles
-                       venn etter at begge hadde flyttet til Oslo. 2 år senere flyttet de sammen i sin første leilighet på
-                       Grunerløkka."
-                    ]
-                ]
-                div [ css [ TextAlign.Left
-                            FlexGrow'(CssFloat 1.0)
-                            FlexBasis'(px 0)
-                            MarginLeft'(rem 1.0) ] ] [
-                    h3 [] [ str "07.08.2021" ]
-                    p [] [
-                        str "Vi skal gifte oss 7.august 2021 - nå som koronaviruset har jekka seg ned litt."
-                    ]
-                    p [] [
-                        str "Planen for dagen formes, og denne nettsiden vil oppdateres med nyttig informasjon."
-                    ]
-                ]
+            // div [ css [ TextAlign.Right
+            //             FlexGrow'(CssFloat 1.0)
+            //             FlexBasis'(px 0)
+            //             MarginRight'(rem 1.0) ] ] [
+            //     h3 [] [ str "24.01.2015" ]
+            //     p [] [
+            //         str
+            //             "Etter å ha unngått hverandre i flere år i Trondhem, møttes Tone og Severin endelig gjennom en felles
+            //        venn etter at begge hadde flyttet til Oslo. 2 år senere flyttet de sammen i sin første leilighet på
+            //        Grunerløkka."
+            //     ]
+            // ]
+            // div [ css [ TextAlign.Left
+            //             FlexGrow'(CssFloat 1.0)
+            //             FlexBasis'(px 0)
+            //             MarginLeft'(rem 1.0) ] ] [
+            //     h3 [] [ str "07.08.2021" ]
+            //     p [] [
+            //         str "Vi skal gifte oss 7.august 2021 - nå som koronaviruset har jekka seg ned litt."
+            //     ]
+            //     p [] [
+            //         str "Planen for dagen formes, og denne nettsiden vil oppdateres med nyttig informasjon."
+            //     ]
+            // ]
             ]
             div [ css [ TextAlign.Center
                         MaxWidth'(rem 36.0)
@@ -308,17 +307,17 @@ let view (model: Model) dispatch =
                     divider "heart"
                     h3 [] [ str "Bryllupet" ]
                     p [] [
-                        str "Vielsen og festen avholdes 7.august 2021 på Kavringen Marina ved Nesodden."
+                        str "Vielsen og festen avholdes 7.august kl 14:00 på Kavringen Marina ved Nesodden."
                     ]
-                ]
-                div [] [
-                    divider "virus"
-                    h3 [] [ str "Korona" ]
-                    p [] [
-                        str
-                            "Vi vil gjennomføre i henhold til gjeldende forskrift. De fleste gjestene er vaksinert, men vi oppfordrer generelt til å bruke huet og følge rådene "
-
-                    ]
+                    br []
+                    br []
+                    img [ Src "/assets/kjøreplan.png"
+                          css [ Width' <| pct 160
+                                MarginLeft' <| pct -30
+                                MediaQuery [ Media.MaxWidth <| px 1000 ] [
+                                    Width' <| pct 100
+                                    MarginLeft' <| pct 0
+                                ] ] ]
                 ]
                 div [] [
                     divider "home"
@@ -335,11 +334,27 @@ Det er også mulig å dra tidligere på egenhånd, men da er det lurt å være l
                     h3 [] [ str "Adkomst" ]
                     p [] [
                         str
-                            "Kavringen er en bitteliten øy på vestsiden av Nesodden. Vi prøver å få til felles båttransport fra Oslo. Hvis man kommer eller drar via land går det en liten gangbro over til fastlandet
-                            , som tar deg til en betongsti med endel trappetrinn oppover til boligområdet Flaskebekktjernet. Her finner du buss til rutebåt som går hver halvtime til Aker Brygge
-                            . Velger du denne måten å dra på, må du huske å ta med gode sko til den bratte stien!
-                        "
+                            "Kavringen er en bitteliten øy på vestsiden av Nesodden. Det blir felles båttransport fra Rådhusbrygge 3 i Oslo kl 12:45, med hjemreise kl 01:00.
+                            "
                         br []
+                        br []
+                        img [ Src "/assets/rådhuskaia.png"
+                              css [ Width' <| pct 100
+                                    MarginLeft' <| pct 0
+                                    MediaQuery [ Media.MaxWidth <| px 1000 ] [
+                                        Width' <| pct 100
+                                        MarginLeft' <| pct 0
+                                    ] ] ]
+                        br []
+                        br []
+                        p [] [
+                            str
+                                "Hvis ønsker å ankomme eller reise via fastlandet istedet, går det en liten gangbro over fra Kavringen
+                                            , som tar deg til en betongsti med endel trappetrinn oppover til boligområdet Flaskebekktjernet. Her finner du buss til rutebåt som går hver halvtime til Aker Brygge
+                                            . Velger du denne måten å dra på, må du huske å ta med gode sko til den bratte stien!
+                                        "
+                        ]
+
                         br []
                         str "Det er også mulig å ta egen bil eller båt."
                         br []
@@ -374,7 +389,7 @@ Det er også mulig å dra tidligere på egenhånd, men da er det lurt å være l
                     h3 [] [ str "Servering" ]
                     p [] [
                         str
-                            "Det blir servert 3 retters middag med drikke til, men husk at det er en lang dag, så ikke hopp over frokosten. Etter middagen er det mulig å kjøpe drikke i baren."
+                            "Det blir servert 3 retters middag med drikke til, men husk at det er en lang dag, så ikke hopp over frokosten. Etter middagen er det mulig å kjøpe drikke i baren. Det blir også mulig å kjøpe noen forfriskninger på båten."
                     ]
                 ]
                 div [] [
@@ -383,6 +398,15 @@ Det er også mulig å dra tidligere på egenhånd, men da er det lurt å være l
                     p [] [
                         str
                             "Vi har kun fotograf under og rett etter vielsen, så etter det setter vi veldig pris på om alle tar bilder til de blir flaue og sender noen til oss etterpå (severin at sverdvik.no eller tonewermundsen at gmail.com) ♥"
+                    ]
+                ]
+                div [] [
+                    divider "virus"
+                    h3 [] [ str "Korona" ]
+                    p [] [
+                        str
+                            "Vi vil gjennomføre i henhold til gjeldende forskrift. De fleste gjestene er vaksinert, men vi oppfordrer generelt til å bruke huet og følge rådene "
+
                     ]
                 ]
                 //                 div [] [
