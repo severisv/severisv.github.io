@@ -319,16 +319,16 @@ let view (model: Model) dispatch =
                                     MarginLeft' <| pct 0
                                 ] ] ]
                 ]
-                div [] [
-                    divider "home"
-                    h3 [] [ str "Overnatting" ]
-                    p [] [
-                        str
-                            "Det lureste er å finne et sted å bo i Oslo Sentrum og bli med på felles båttransport til og fra festen.
-Det er også mulig å dra tidligere på egenhånd, men da er det lurt å være litt forberedt. Se under.
-"
-                    ]
-                ]
+                //                 div [] [
+//                     divider "home"
+//                     h3 [] [ str "Overnatting" ]
+//                     p [] [
+//                         str
+//                             "Det lureste er å finne et sted å bo i Oslo Sentrum og bli med på felles båttransport til og fra festen.
+// Det er også mulig å dra tidligere på egenhånd, men da er det lurt å være litt forberedt. Se under.
+// "
+//                     ]
+//                 ]
                 div [] [
                     divider "bus"
                     h3 [] [ str "Adkomst" ]
@@ -389,7 +389,7 @@ Det er også mulig å dra tidligere på egenhånd, men da er det lurt å være l
                     h3 [] [ str "Servering" ]
                     p [] [
                         str
-                            "Det blir servert 3 retters middag med drikke til, men husk at det er en lang dag, så ikke hopp over frokosten. Etter middagen er det mulig å kjøpe drikke i baren. Det blir også mulig å kjøpe noen forfriskninger på båten."
+                            "Det blir servert 3 retters middag med drikke til, men husk at det er en lang dag, så ikke hopp over frokosten. Etter middagen er det mulig å kjøpe drikke fra servitørene. Det blir også mulig å kjøpe noen forfriskninger på båten. De tar kort både på Kavringen og ombord på båten."
                     ]
                 ]
                 div [] [
@@ -405,8 +405,11 @@ Det er også mulig å dra tidligere på egenhånd, men da er det lurt å være l
                     h3 [] [ str "Korona" ]
                     p [] [
                         str
-                            "Vi vil gjennomføre i henhold til gjeldende forskrift. De fleste gjestene er vaksinert, men vi oppfordrer generelt til å bruke huet og følge rådene "
-
+                            "Forskriften sier at «arrangør skal legge til rette for at det er mulig å holde én meters avstand». Det er med andre ord ikke noen direkte krav til hvordan man skal oppføre seg som gjest, men selv om nesten alle gjestene er vaksinert oppfordrer vi til å bruke huet og vise hensyn 😊"
+                        br []
+                        br []
+                        str
+                            "Klemming; hvis noen har lyst til å gi oss eller hverandre en klem på den store dagen så synes vi det er bare hyggelig, men vi har også full forståelse for de som vil ta sine forholdsregler og holde avstand."
                     ]
                 ]
                 //                 div [] [
