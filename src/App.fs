@@ -389,7 +389,7 @@ let view (model: Model) dispatch =
                     h3 [] [ str "Servering" ]
                     p [] [
                         str
-                            "Det blir servert 3 retters middag med drikke til, men husk at det er en lang dag, så ikke hopp over frokosten. Etter middagen er det mulig å kjøpe drikke fra servitørene. Det blir også mulig å kjøpe noen forfriskninger på båten. De tar kort både på Kavringen og ombord på båten."
+                            "Det blir servert 3 retters middag med drikke til, men husk at det er en lang dag, så ikke hopp over frokosten. Etter middagen er det mulig å kjøpe drikke fra servitørene (kun med Vipps). Det blir også mulig å kjøpe noen forfriskninger på båten (de tar kort)."
                     ]
                 ]
                 div [] [
